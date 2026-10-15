@@ -354,9 +354,17 @@ button.workspace-search {
   background: var(--code-background);
 }
 
-.container .actionbar__actions { flex-wrap: wrap; gap: 6px; }
-.container .actionbar__login { background: var(--accent); color: var(--text-on-bright-bg); font-weight: 600; }
+.container .actionbar { flex-wrap: wrap; flex-shrink: 0; }
+.container .actionbar__status { flex-basis: 100%; text-align: start; padding-inline: 0; }
+.container .actionbar__actions { flex: 1 1 0; min-inline-size: 0; max-inline-size: 100%; flex-wrap: wrap; justify-content: flex-start; gap: 6px; }
+.container .actionbar__actions > button { max-inline-size: 100%; white-space: normal; height: auto; min-block-size: 36px; }
+.container .actionbar__login { padding-inline: 18px; background: var(--accent); color: var(--text-on-bright-bg); font-weight: 600; }
 .container .actionbar__login svg { fill: currentColor; }
+.container label.acc .acc_lastused { font-size: 12px; line-height: 1.5; }
+.container .acc_current { display: block; color: var(--green); font-size: 12px; margin-block: 4px; }
+.workspace-heading__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.container .manage-platforms .btn_close { width: auto !important; }
+.container .manage-platforms .btn_close span { padding-inline: 24px; }
 
 .container .page .modalFG {
   border: 1px solid var(--shell-line);

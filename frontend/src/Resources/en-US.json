@@ -1,4 +1,9 @@
 {
+  "Shell_CurrentAccount": "Current account",
+  "Shell_LastUsed": "Last used",
+  "Shell_ShortcutFolder": "Shortcut folder",
+  "Shell_PlatformSettings": "{platform} settings",
+  "Shell_PlatformSaveError": "Could not save platforms. Try again.",
   "Shell_GamesHint": "Browse your games and launch shortcuts.",
   "Shell_Accounts": "Accounts",
   "Shell_Games": "Games",

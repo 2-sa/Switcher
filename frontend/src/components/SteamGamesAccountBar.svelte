@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { aboveDropdown } from "../lib/actions/viewportDropdown";
   import { t } from "../stores/i18n";
   import { tooltip } from "../lib/actions/tooltip";
   import { DUR, scaleFade } from "../lib/animation";
@@ -124,6 +125,7 @@
       {#if ddOpen}
         <div
           class="shortcutDropdown steamGamesBar__dropdown open"
+          use:aboveDropdown
           in:scaleFade={{ start: 0.94, duration: DUR.fast }}
           out:scaleFade={{ start: 0.96, duration: DUR.instant }}
         >

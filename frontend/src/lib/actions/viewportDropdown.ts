@@ -11,6 +11,59 @@ const MAX_VIEWPORT_HEIGHT_RATIO = 0.6;
 /** Below this a menu is too short to be worth opening in place. */
 const MIN_MENU_HEIGHT = 144;
 
+export function computeAboveDropdownLayout(
+  trigger: Pick<DOMRect, "left" | "right" | "top">,
+  bounds: Pick<DOMRect, "left" | "right" | "top">,
+  menuWidth: number,
+  rtl: boolean,
+): { left: number; maxWidth: number; maxHeight: number } {
+  const maxWidth = Math.max(0, bounds.right - bounds.left - 2 * VIEWPORT_MARGIN);
+  const width = Math.min(menuWidth, maxWidth);
+  const desired = rtl ? trigger.right - width : trigger.left;
+  const left = Math.max(bounds.left + VIEWPORT_MARGIN, Math.min(desired, bounds.right - VIEWPORT_MARGIN - width));
+  return {
+    left: left - trigger.left,
+    maxWidth,
+    maxHeight: Math.max(0, Math.min(260, trigger.top - bounds.top - 2 * VIEWPORT_MARGIN)),
+  };
+}
+
+/** Footer menus open upward and stay inside the content pane, beside the sidebar. */
+export function aboveDropdown(node: HTMLElement) {
+  const anchor = node.parentElement;
+  const boundary = node.closest<HTMLElement>(".page-content-wrapper");
+  let frame = 0;
+  function measure(): void {
+    frame = 0;
+    if (!anchor || !boundary) return;
+    const layout = computeAboveDropdownLayout(
+      anchor.getBoundingClientRect(), boundary.getBoundingClientRect(),
+      Math.max(168, node.scrollWidth), getComputedStyle(node).direction === "rtl",
+    );
+    node.style.left = `${layout.left}px`;
+    node.style.maxWidth = `${layout.maxWidth}px`;
+    node.style.maxHeight = `${layout.maxHeight}px`;
+  }
+  function schedule(): void {
+    if (frame) cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(measure);
+  }
+  const observer = new ResizeObserver(schedule);
+  if (anchor) observer.observe(anchor);
+  if (boundary) observer.observe(boundary);
+  const footer = node.closest<HTMLElement>(".actionbar");
+  if (footer) observer.observe(footer);
+  measure();
+  window.addEventListener("resize", schedule);
+  return {
+    destroy(): void {
+      observer.disconnect();
+      window.removeEventListener("resize", schedule);
+      if (frame) cancelAnimationFrame(frame);
+    },
+  };
+}
+
 export function computeViewportDropdownLayout(
   trigger: Pick<DOMRect, "top" | "bottom" | "left">,
   options: { viewportHeight: number; viewportWidth: number; menuHeight: number; menuWidth: number },

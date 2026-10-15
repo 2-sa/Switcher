@@ -101,6 +101,7 @@
   } from "../lib/dragReorderShortcuts";
   import { createShortcutFileDropAcceptor } from "../lib/shortcutFileDropAcceptor";
   import { ghostCloneMount } from "../lib/actions/ghostCloneMount";
+  import { aboveDropdown } from "../lib/actions/viewportDropdown";
 
   export let platformName: string;
 
@@ -560,7 +561,7 @@
     bind:el={pinListEl}
     zone="pinned"
     zoneClass="shortcuts shortcutDndGrid"
-    expandClass={ddOpen && pinNames.length === 0 && dropNames.length > 0}
+    expandClass={!!$dnd.draggingId && ddOpen && pinNames.length === 0 && dropNames.length > 0}
     ariaLabel={$t("Stats_GameShortcutsHotbar")}
     displaySlots={displayPinned}
     {meta}
@@ -596,6 +597,7 @@
         bind:this={dropdownEl}
         class="shortcutDropdown gameShortcuts open"
         id="shortcutDropdown"
+        use:aboveDropdown
         in:scaleFade={{ start: 0.94, duration: DUR.fast }}
         out:scaleFade={{ start: 0.96, duration: DUR.instant }}
       >
@@ -616,6 +618,7 @@
           aria-label={$t("Tooltip_ShortcutFolder")}
           on:click={() => openShortcutFolder(platformName)}
         >
+          <span>{$t("Shell_ShortcutFolder")}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"

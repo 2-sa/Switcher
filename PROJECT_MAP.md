@@ -121,17 +121,28 @@ Local checks performed without installing dependencies:
 - New Arabic/English shell keys and placeholder parity passed. Default text contrast checks passed: primary 15.68:1, secondary 7.13:1, accent 7.59:1 on their intended surfaces.
 - Twenty-four changed TypeScript scripts (including Svelte script blocks) parsed with Node's TypeScript parser. JSON dictionaries parsed. This does not compile Svelte templates or perform semantic TypeScript checking.
 - `git diff --check` and whitespace checks across changed/untracked source files passed.
-- GitHub Verify run [38722942797](https://github.com/2-sa/Switcher/actions/runs/38722942797) passed on commit `69877c1ed73054c7ff301b943b6530434b1e3fde`: generated bindings, Svelte/TypeScript checking, Vitest, frontend production build, full Go suite, and Windows application build. The run took 4m41s. Artifact `switcher-windows-unsigned` is available as [artifact 11966333517](https://github.com/2-sa/Switcher/actions/runs/38722942797/artifacts/11966333517); it is a test executable, not a signed release. No native application has been installed or run locally.
+- GitHub Verify run [38722942797](https://github.com/2-sa/Switcher/actions/runs/38722942797) passed on commit `69877c1ed73054c7ff301b943b6530434b1e3fde`: generated bindings, Svelte/TypeScript checking, Vitest, frontend production build, full Go suite, and Windows application build. The run took 4m41s. Artifact `switcher-windows-unsigned` is available as [artifact 11966333517](https://github.com/2-sa/Switcher/actions/runs/38722942797/artifacts/11966333517); it is a test executable, not a signed release. The user later downloaded and ran this test executable; baseline native UI inspection is recorded below.
 - Reviewed a separate browser design preview with sample data: Arabic/English direction, platform/account/settings layouts, full and compact sidebar, and no document horizontal overflow at 600px width. Captured Arabic and English images. This preview reuses the palette/layout CSS but is not the running Wails application and does not prove native integrations.
 
 Preview artifacts are outside the repository under `C:/Users/PC/.codex/visualizations/2026/10/15/01a13efc-f407-7740-b711-978244d25d3e/`: `redesign-preview.html`, `redesign-ar.jpg`, and `redesign-en.jpg`. A temporary loopback preview runs at `http://127.0.0.1:8347/`.
 
+## [NATIVE UI REPAIR — 2026-10-15]
+
+Baseline defects reproduced in the running downloaded executable: clipped footer actions at 902px, an empty pinned drop zone shifting controls when shortcuts open, the shortcut-folder button outside its popup, left-aligned Arabic settings headings, and hard-to-read account metadata. Source inspection additionally found unsynchronized sidebar data and unchecked/racing platform-setting writes.
+
+- Footer actions now shrink to available width and wrap; status occupies its own row only when present. Login padding is compact and the footer keeps its required height.
+- Shortcut menus and the Steam games account picker are constrained to content-pane bounds in both directions. The folder action stays inside the shortcut menu. Empty pinned targets appear only during dragging.
+- Arabic headings, search results and context menus use logical alignment. Account lists have translated accessible names, visible current-account status, labeled last-use dates, and bidirectional date isolation. Search is visible on account pages; platform settings have a distinct accessible label.
+- Platform management uses readable grid rows, a real loading state, serialized writes, saved-state preservation on failure, an inline error, and refreshed shared navigation data after loading.
+
+Local validation without downloads/installations: nine dropdown regression cases passed against the actual TypeScript test source using a Node assertion shim (the new export was first verified missing); simulated the actual platform-change handler for failed writes, retry, concurrent writes, and successful commit; parsed ten changed TypeScript scripts; checked Arabic/English keys and placeholders; git whitespace check passed. Full Svelte compilation, Vitest and native build are pending GitHub verification. These local checks do not prove the repaired executable's rendered appearance.
+
 ## [ORPHANS & PENDING]
 
-No known newly orphaned source remains. Keep validation items below until actual evidence resolves them.
+No known newly orphaned source remains. Current repair: GitHub checks/build and visual retest of the repaired executable are pending. Keep validation items below until actual evidence resolves them.
 
 - Resolved CI failures: first run `38721926769` used `C:/Users/RUNNER~1/...` temporary paths, causing existing shortcut/backup path comparisons to fail. Initial correction `44adb716` used a runner context at unsupported job-env scope; `69877c1e` instead exports TEMP/TMP from RUNNER_TEMP through GITHUB_ENV in a startup step. The complete Go suite and executable build then passed in run `38722942797`. No protection checks or failing tests were disabled.
 - Visually inspect the real Windows build: all routes, Steam games/tools, Guard enrollment/unlock/restore, error/loading/empty states, search/context menus, dialogs, drag ordering, keyboard/gamepad controls, and actual account switching.
 - Validate saved custom backgrounds and representative dark/light themes in the real application; the sample preview covers the new default palette only.
-- Baseline native screenshots were unavailable in this environment. Other OS runtime behavior is unverified.
+- Baseline native Windows inspection now covers Home, Riot accounts, Steam accounts, shortcut expansion/Escape, settings search/language dropdown, and platform management at 902 x 598. Other OS runtime behavior is unverified.
 - Latest-stable/deprecation verification remains incomplete for several upstream packages. No new package or upgrade was introduced; do not treat this redesign as a dependency modernization.

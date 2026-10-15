@@ -1151,7 +1151,7 @@
           itemClass="acc_list_item acc_list_item--drag"
           placeholderClass="acc_list_item placeHolderAcc"
           ghostClass="acc_list_item acc_list_item--ghost"
-          ariaLabel="Accounts"
+          ariaLabel={$t("Shell_Accounts")}
           itemAriaLabel={accountGridLabel}
           activeItem={selectedId || undefined}
           selectOnArrow={true}
@@ -1248,6 +1248,10 @@
                     title={nameStatus?.label}
                   ><bdi>{$censoredName(adapter.name(acc))}</bdi></h6>
 
+                  {#if adapter.currentSession(acc)}
+                    <span class="acc_current" aria-hidden="true">{$t("Shell_CurrentAccount")}</span>
+                  {/if}
+
                   {#if a11yDescription}
                     <span id={descId} class="sr-only">{a11yDescription}</span>
                   {/if}
@@ -1287,7 +1291,7 @@
                   <slot name="account-after-stats" {acc} />
 
                   {#if adapter.shouldShowLastUsed(acc)}
-                    <p class="acc_lastused">{formatLastLoginForLocale(adapter.lastUsed(acc), $locale)}</p>
+                    <p class="acc_lastused">{$t("Shell_LastUsed")}<br /><bdi>{formatLastLoginForLocale(adapter.lastUsed(acc), $locale)}</bdi></p>
                   {/if}
 
                   <slot name="account-footer" {acc} />

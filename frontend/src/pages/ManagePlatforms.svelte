@@ -6,10 +6,14 @@
   import { DUR, fadeMotion, fadeUp, flipMotion } from "../lib/animation";
   import * as PlatformService from "../../bindings/TcNo-Acc-Switcher/internal/platform/platformservice.js";
   import "../styles/Settings.scss";
+  import { homeScreenData } from "../stores/homeScreenData";
 
   let allNames: string[] = [];
   let disabled: string[] = [];
   let loadError: string | null = null;
+  let loading = true;
+  let saving = false;
+  let saveError: string | null = null;
 
   $: appBarTitle.set($t("Title_Platforms_Settings"));
   $: disabledSorted = [...disabled].sort((a, b) =>
@@ -24,6 +28,7 @@
     loadError = null;
     try {
       const s = await PlatformService.GetStartup();
+      homeScreenData.set(s);
       if (s.platformsFileMissing) {
         allNames = [];
         disabled = [];
@@ -33,31 +38,29 @@
       disabled = [...(s.disabledPlatformNames ?? [])];
     } catch (e) {
       loadError = e instanceof Error ? e.message : String(e);
+    } finally {
+      loading = false;
     }
   }
 
-  async function showPlatform(name: string): Promise<void> {
-    const next = disabled.filter((x) => x !== name);
-    disabled = next;
-    await PlatformService.SetDisabledPlatforms(next);
-    await refresh();
-  }
-
-  async function hidePlatform(name: string): Promise<void> {
-    const next = [...disabled, name];
-    disabled = next;
-    await PlatformService.SetDisabledPlatforms(next);
-    await refresh();
-  }
-
-  function onDisabledRowChange(e: Event, item: string): void {
+  async function onPlatformChange(e: Event, item: string): Promise<void> {
     const el = e.currentTarget as HTMLInputElement;
-    if (el.checked) void showPlatform(item);
-  }
-
-  function onEnabledRowChange(e: Event, item: string): void {
-    const el = e.currentTarget as HTMLInputElement;
-    if (!el.checked) void hidePlatform(item);
+    const enabled = el.checked;
+    // Keep the checkbox consistent with saved state until persistence succeeds.
+    el.checked = !disabled.includes(item);
+    if (saving) return;
+    saving = true;
+    saveError = null;
+    const next = enabled ? disabled.filter((x) => x !== item) : [...new Set([...disabled, item])];
+    try {
+      await PlatformService.SetDisabledPlatforms(next);
+      disabled = next;
+      await refresh();
+    } catch (e) {
+      saveError = $t("Shell_PlatformSaveError");
+    } finally {
+      saving = false;
+    }
   }
 
   function saveAndClose(): void {
@@ -71,11 +74,16 @@
   });
 </script>
 
-<div class="main-content main-spacing">
+<div class="main-content main-spacing manage-platforms" aria-busy={loading || saving}>
   <h1 class="SettingsHeader">{$t("Settings_Header_ExtraPlatforms")}</h1>
 
-  {#if loadError}
-    <p class="settings-err">{loadError}</p>
+  {#if saveError}
+    <p class="settings-err" role="alert">{saveError}</p>
+  {/if}
+  {#if loading}
+    <p role="status">{$t("Button_Loading")}</p>
+  {:else if loadError}
+    <p class="settings-err" role="alert">{loadError}</p>
   {:else if !allNames.length}
     <span>{$t("Settings_NoPlatforms")}</span>
   {:else}
@@ -96,10 +104,11 @@
               class="form-check-input"
               type="checkbox"
               id={"dis-" + item}
-              on:change={(e) => onDisabledRowChange(e, item)}
+              disabled={saving}
+              on:change={(e) => { void onPlatformChange(e, item); }}
             />
             <label class="form-check-label" for={"dis-" + item}></label>
-            <label for={"dis-" + item}>{item}<br /></label>
+            <label for={"dis-" + item}><bdi>{item}</bdi></label>
           </div>
         {/each}
       </div>
@@ -120,17 +129,18 @@
               type="checkbox"
               id={"en-" + item}
               checked
-              on:change={(e) => onEnabledRowChange(e, item)}
+              disabled={saving}
+              on:change={(e) => { void onPlatformChange(e, item); }}
             />
             <label class="form-check-label" for={"en-" + item}></label>
-            <label for={"en-" + item}>{item}<br /></label>
+            <label for={"en-" + item}><bdi>{item}</bdi></label>
           </div>
         {/each}
       </div>
     {/if}
 
     <div class="buttoncol col_close">
-      <button type="button" class="btn_close" on:click={saveAndClose}>
+      <button type="button" class="btn_close" disabled={saving} on:click={saveAndClose}>
         <span>{$t("Button_Close")}</span>
       </button>
     </div>
@@ -138,6 +148,28 @@
 </div>
 
 <style lang="scss">
+  .manage-platforms .platformsCheckboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    margin-block-end: 24px;
+  }
+  .manage-platforms .form-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-inline-size: 0;
+    padding: 10px;
+    border: 1px solid var(--shell-line);
+    border-radius: 8px;
+    background: var(--shell-raised);
+  }
+  .manage-platforms .form-check label:last-child {
+    flex: 1;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
   .settings-err {
     color: var(--red);
     padding: 0.5rem;

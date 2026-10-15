@@ -253,7 +253,9 @@
   flex-direction: row;
   align-items: center;
   gap: 0;
-  height: 100%;
+  height: auto;
+  flex-wrap: wrap;
+  max-inline-size: 100%;
   min-width: 0;
 }
 
@@ -261,8 +263,8 @@
    on the empty label next to the input); this only fits the text to the action bar. */
 .steamGamesBar__launch {
   flex: 0 0 auto;
-  margin-right: 0.5rem;
-  white-space: nowrap;
+  margin-inline-end: 0.5rem;
+  white-space: normal;
   font-size: 0.88rem;
   font-weight: 600;
 
@@ -318,10 +320,14 @@
   display: flex;
   flex-direction: column;
   bottom: calc(100% + 10px);
-  left: 50%;
-  /* `translate`, not `transform`: the open/close transition animates `transform`
-     and would otherwise drop the panel half its width to the right. */
-  translate: -50% 0;
+  left: 0;
   transform-origin: bottom center;
-  min-width: 168px;
+  min-width: 0;
+  width: 168px;
+
+  .shortcutDropdownItems {
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+  }
 }

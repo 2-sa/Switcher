@@ -561,17 +561,18 @@
             <h1>{#if $route.page === "home"}{$t("Shell_Platforms")}{:else}<bdi>{$route.platformName}</bdi>{/if}</h1>
             <p>{$t($route.page === "home" ? "Shell_PlatformsHint" : $route.platformName === "Steam" && $steamPageTab === "games" ? "Shell_GamesHint" : "Shell_AccountsHint")}</p>
           </div>
-          {#if $route.page === "home"}
-            <button class="workspace-search" type="button" on:click={() => openSearchOverlay()}>
+          <div class="workspace-heading__actions">
+            <button class="workspace-search" type="button" on:click={() => { if ($route.page === "platform" && $route.platformName === "Steam" && $steamPageTab === "games") focusSteamGamesSearch(); else openSearchOverlay(); }}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
               {$t("Context_Search")}
             </button>
-          {:else if $route.platformName === "Steam"}
+          {#if $route.page === "platform" && $route.platformName === "Steam"}
             <div class="workspace-tabs" role="group" aria-label={$t("Shell_View")}>
               <button type="button" aria-pressed={$steamPageTab === "switcher"} on:click={() => steamPageTab.set("switcher")}>{$t("Shell_Accounts")}</button>
               <button type="button" aria-pressed={$steamPageTab === "games"} on:click={() => steamPageTab.set("games")}>{$t("Shell_Games")}</button>
             </div>
           {/if}
+          </div>
         </header>
       {/if}
       <div class="page-stage">

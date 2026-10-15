@@ -77,7 +77,7 @@
     width: 100%;
     border: none;
     font: inherit;
-    text-align: left;
+    text-align: start;
     padding: 0em 1em;
   }
   
@@ -162,6 +162,6 @@
   .searchOverlay_categoryHint {
     color: var(--text-white-65);
     font-size: 13px;
-    text-align: left;
+    text-align: start;
     padding: 0 2px 6px 2px;
   }
