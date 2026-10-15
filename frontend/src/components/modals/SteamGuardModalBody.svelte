@@ -3641,7 +3641,7 @@
     gap: 0.35rem;
     width: 100%;
     padding: 0;
-    text-align: left;
+    text-align: start;
   }
 
   /* Beats the global `input[type="password"]` rules so inputs span the form, not their content. */
@@ -3657,7 +3657,7 @@
     gap: 0.55rem;
     width: fit-content;
     justify-self: start;
-    text-align: left;
+    text-align: start;
   }
 
   /*
@@ -3713,7 +3713,7 @@
 
   .steam-guard__unlock-form {
     justify-items: stretch;
-    text-align: left;
+    text-align: start;
   }
 
   /* Centred with grid alignment, not auto margins: `.steam-guard :global(button)`
@@ -3911,7 +3911,7 @@
     border-radius: 0.25rem;
     background: transparent;
     color: inherit;
-    text-align: left;
+    text-align: start;
     cursor: pointer;
   }
 

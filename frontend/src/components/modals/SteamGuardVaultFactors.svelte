@@ -81,7 +81,7 @@
     gap: 0.35rem;
     width: 100%;
     padding: 0;
-    text-align: left;
+    text-align: start;
   }
 
   /* Beats the global `input` rules so the input spans the form, not its content. */

@@ -340,6 +340,28 @@ describe("context menu keyboard navigation", () => {
     expect(event.preventDefault).toHaveBeenCalled();
   });
 
+  it("expands Arabic submenus with ArrowLeft", () => {
+    const menu = buildMenu();
+    const deps = navDeps();
+    setupGlobals(menu.parentAction);
+    Object.defineProperty(document.documentElement, "dir", { value: "rtl", configurable: true });
+    menu.parentAction.focus();
+    expect(handleContextMenuKeydown(keyboardEvent("ArrowLeft"), menu.root as unknown as HTMLElement, deps)).toBe(true);
+    expect(deps.expandSubmenuForLi).toHaveBeenCalledWith(menu.parentLi);
+    expect(document.activeElement).toBe(menu.submenuSearch);
+  });
+
+  it("returns to the Arabic parent menu with ArrowRight", () => {
+    const menu = buildMenu();
+    const deps = { ...navDeps(), collapseSubmenuForLi: vi.fn() };
+    setupGlobals(menu.submenuLeaf);
+    Object.defineProperty(document.documentElement, "dir", { value: "rtl", configurable: true });
+    menu.submenuLeaf.focus();
+    expect(handleContextMenuKeydown(keyboardEvent("ArrowRight"), menu.root as unknown as HTMLElement, deps)).toBe(true);
+    expect(deps.collapseSubmenuForLi).toHaveBeenCalledWith(menu.parentLi);
+    expect(document.activeElement).toBe(menu.parentAction);
+  });
+
   it("skips submenu search when controller focus expands a submenu", () => {
     const menu = buildMenu();
     const deps = navDeps();

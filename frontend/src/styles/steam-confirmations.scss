@@ -267,7 +267,7 @@ button.confirmations-row__body {
   padding: 0;
   background: transparent;
   color: var(--whiteSecondary);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 
   // UI.scss gives every span inside a button `line-height: 2.5em`, which suits a
@@ -520,7 +520,7 @@ button.confirmations-row__body {
 // The class is doubled up so the underline out-specifies fancyLink's own
 // `text-decoration: none`.
 button.fancyLink.confirmations-detail__profile {
-  text-align: left;
+  text-align: start;
   text-decoration: underline;
 
   &:focus-visible { outline: 2px solid var(--role-focus-ring); outline-offset: 2px; }

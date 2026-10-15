@@ -102,6 +102,7 @@
     <input
       bind:this={inputEl}
       bind:value={path}
+      dir="ltr"
       type="text"
       class="modal-input"
       spellcheck="false"
@@ -129,7 +130,7 @@
         <div class="folder_indicator_text"></div>
       </div>
       <div class="folder_indicator_bg" class:notfound={soughtMismatch}>
-        <span>{soughtFilename.trim()}</span>
+        <bdi>{soughtFilename.trim()}</bdi>
       </div>
     </div>
   {/if}

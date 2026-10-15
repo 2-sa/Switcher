@@ -304,18 +304,21 @@
 
   function nudgeRootForSubmenus(el: HTMLUListElement): void {
     const subs = el.querySelectorAll(".submenu");
-    let shiftLeft = 0;
+    let overflowLeft = 0;
+    let overflowRight = 0;
     subs.forEach((sub) => {
       const r = sub.getBoundingClientRect();
-      const rs = r.right - window.innerWidth;
-      if (rs > 0) shiftLeft = Math.max(shiftLeft, rs + 40);
+      if (!r.width || !r.height) return;
+      overflowLeft = Math.max(overflowLeft, PAD - r.left);
+      overflowRight = Math.max(overflowRight, r.right - window.innerWidth + PAD);
     });
-    if (shiftLeft <= 0) {
+    const shift = overflowLeft > 0 ? overflowLeft : -overflowRight;
+    if (!shift) {
       return;
     }
     const cur = el.getBoundingClientRect();
     const nextLeft = clamp(
-      cur.left - shiftLeft,
+      cur.left + shift,
       PAD,
       Math.max(PAD, window.innerWidth - cur.width - PAD),
     );

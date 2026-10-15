@@ -1,5 +1,8 @@
 /* Direction follows the selected locale; positioning owned by JS stays physical. */
 html[dir="rtl"] {
+  ul.contextmenu li.hasSubmenu::after {
+    transform: translateY(-50%) rotate(135deg);
+  }
   .row,
   ul.contextmenu,
   .modalFG,

@@ -32,13 +32,13 @@
 .actionbar__status {
   flex: 1 1 auto;
   min-width: 0;
-  text-align: left;
+  text-align: start;
   font-size: 0.88rem;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-left: 0.35rem;
+  padding-inline-start: 0.35rem;
   color: var(--text-white-92);
 }
 

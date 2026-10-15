@@ -20,6 +20,7 @@
     margin: 0;
     color: var(--white, #fff);
     line-height: 1.45;
+    text-align: start;
   }
 
   .modal-html :global(p) {

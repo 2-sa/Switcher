@@ -359,6 +359,9 @@ export function handleContextMenuKeydown(ev: KeyboardEvent, menuRoot: HTMLElemen
     return true;
   }
 
-  const handler = KEY_HANDLERS[ev.key];
+  const key = document.documentElement?.dir === "rtl"
+    ? ev.key === "ArrowLeft" ? "ArrowRight" : ev.key === "ArrowRight" ? "ArrowLeft" : ev.key
+    : ev.key;
+  const handler = KEY_HANDLERS[key];
   return handler ? handler(ev, active, menu, deps) : false;
 }

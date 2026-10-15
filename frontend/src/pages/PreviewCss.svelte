@@ -1461,7 +1461,7 @@
     box-shadow: var(--shadow, 0 4px 14px var(--shadow-color-35));
     background: var(--role-toast-bg, var(--notification-main-bg, var(--darker-code-background)));
     color: var(--role-toast-fg, var(--notification-message-fg, var(--white)));
-    text-align: left;
+    text-align: start;
   }
 
   .preview-static-toast .toast__row {

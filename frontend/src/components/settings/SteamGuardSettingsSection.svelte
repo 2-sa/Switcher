@@ -730,7 +730,7 @@
   }
 
   .steam-guard-factor-note {
-    margin-left: 0.4em;
+    margin-inline-start: 0.4em;
     font-size: 0.85em;
     opacity: 0.75;
   }
@@ -740,7 +740,8 @@
      fancyLink carries the link look and the reset that keeps a theme from
      skinning it as one; only the spacing, weight and underline are local. */
   .steam-guard-factor-remove {
-    margin: 0 0 0 0.35em;
+    margin: 0;
+    margin-inline-start: 0.35em;
     font-weight: 400;
     text-decoration: underline;
   }

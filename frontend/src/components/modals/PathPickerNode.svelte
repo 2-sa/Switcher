@@ -14,7 +14,7 @@
   import { collapse, DUR } from "../../lib/animation";
   import { getContext, onDestroy } from "svelte";
   import { writable, type Writable } from "svelte/store";
-  import { t } from "../../stores/i18n";
+  import { isRtl, t } from "../../stores/i18n";
 
   type DirEntry = { name: string; path: string; isDir: boolean };
   type TreeContext = {
@@ -212,7 +212,7 @@
 
 <div
   class="pp-node"
-  style:padding-left={depth === 0 ? "0" : "14px"}
+  style:padding-inline-start={depth === 0 ? "0" : "14px"}
   role="treeitem"
   tabindex={rowActive ? 0 : -1}
   aria-level={depth + 1}
@@ -243,11 +243,11 @@
         return;
       case "ArrowRight":
         e.preventDefault();
-        handleArrowRight();
+        if ($isRtl) handleArrowLeft(); else handleArrowRight();
         return;
       case "ArrowLeft":
         e.preventDefault();
-        handleArrowLeft();
+        if ($isRtl) handleArrowRight(); else handleArrowLeft();
         return;
       case "Home":
         e.preventDefault();
@@ -328,15 +328,15 @@
       class:selected-path={rowSelected}
       class:ancestor-of-selected={rowAncestor}
       title={rowTitle}
-    >{displayLabel}</span>
+    ><bdi>{displayLabel}</bdi></span>
   </div>
   {#if expanded}
     <div class="pp-node-group" role="group" transition:collapse={{ duration: DUR.fast }}>
       {#if loading}
-        <div class="pp-muted" style:padding-left="14px">…</div>
+        <div class="pp-muted" style:padding-inline-start="14px">…</div>
       {/if}
       {#if loadError}
-        <div class="pp-err" style:padding-left="14px">{loadError}</div>
+        <div class="pp-err" style:padding-inline-start="14px">{loadError}</div>
       {/if}
       {#each children as c (c.path)}
         {#if c.isDir || !dirsOnly}
@@ -362,7 +362,7 @@
 
 <style lang="scss">
   .pp-node {
-    text-align: left;
+    text-align: start;
   }
   .pp-row {
     display: flex;
@@ -391,7 +391,7 @@
   }
   .pp-row-badge {
     position: absolute;
-    right: 0;
+    inset-inline-end: 0;
     bottom: 1px;
     width: 12px;
     height: 12px;

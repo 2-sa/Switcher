@@ -137,6 +137,16 @@ Baseline defects reproduced in the running downloaded executable: clipped footer
 
 Local validation without downloads/installations: nine dropdown regression cases passed against the actual TypeScript test source using a Node assertion shim (the new export was first verified missing); simulated the actual platform-change handler for failed writes, retry, concurrent writes, and successful commit; parsed ten changed TypeScript scripts; checked Arabic/English keys and placeholders; git whitespace check passed. Full Svelte compilation, Vitest and native build are pending GitHub verification. These local checks do not prove the repaired executable's rendered appearance.
 
+## [RTL FOLLOW-UP — LOCAL REVIEW]
+
+User feedback after commit 944bf850: the interface still contains widespread LTR text. Further commits/pushes are withheld pending review; the running executable does not automatically incorporate source edits.
+
+- Audited every explicit text alignment declaration across Svelte components and SCSS. Removed remaining physical left/right text alignment in Steam Guard fields, unlock forms, account lists, restore screens, vault factors, confirmation rows/profile links, server table headers, file picker, feedback counter, action status, preview toast, captions, and the Steam2003 tooltip. Centered controls retain their intended alignment; technical input values remain isolated LTR.
+- Converted search-icon gaps, factor-action spacing, file-tree indentation/badges, and context-menu gutters to logical properties. File labels use bdi; the path input explicitly preserves LTR.
+- Arabic submenus now open toward the left and mirror their arrow. Keyboard expansion/back navigation follows locale direction in context menus and the file tree. Menu bounds handle overflow on either viewport edge.
+- Local validation: the two new Arabic context-menu regression cases failed before the keyboard fix; all 16 actual test cases subsequently passed using a Node assertion/mock shim, without installing Vitest locally. Four file-tree arrow scenarios and three submenu-boundary simulations passed. Twelve changed TypeScript scripts parsed; whitespace checks passed. No physical left/right text-align declarations remain in application Svelte/SCSS sources.
+- These are source and simulated-logic checks. Full Svelte compilation and the repaired native application's rendered RTL remain unverified. No additional commit, push, installation, or download was performed for this follow-up.
+
 ## [ORPHANS & PENDING]
 
 No known newly orphaned source remains. Current repair: GitHub checks/build and visual retest of the repaired executable are pending. Keep validation items below until actual evidence resolves them.

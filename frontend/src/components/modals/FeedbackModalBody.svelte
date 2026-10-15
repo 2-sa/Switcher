@@ -124,7 +124,7 @@
     margin: 0.2rem 0 0;
     font-size: 0.85rem;
     color: var(--modal-muted-fg, var(--blackTernary, #a7abbe));
-    text-align: right;
+    text-align: end;
   }
 
   .modal-feedback-attach-log {

@@ -80,7 +80,7 @@
   .sg-restore {
     display: grid;
     gap: 0.75rem;
-    text-align: left;
+    text-align: start;
   }
 
   .sg-restore p {
@@ -132,7 +132,7 @@
     display: grid;
     gap: 0.1rem;
     flex: none;
-    text-align: right;
+    text-align: end;
     color: var(--role-success, #4caf50);
     font-size: 0.85rem;
     font-weight: 600;
