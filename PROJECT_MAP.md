@@ -1,6 +1,6 @@
 # Switcher — Interface Redesign
 
-Status: redesign implemented in source; native acceptance and full CI are pending.
+Status: redesign and Windows CI verified; native visual/interaction acceptance is pending.
 Reviewed: 2026-10-15. Shell date check returned `2026-10`.
 
 ## [SCOPE & ASSUMPTIONS]
@@ -121,6 +121,7 @@ Local checks performed without installing dependencies:
 - New Arabic/English shell keys and placeholder parity passed. Default text contrast checks passed: primary 15.68:1, secondary 7.13:1, accent 7.59:1 on their intended surfaces.
 - Twenty-four changed TypeScript scripts (including Svelte script blocks) parsed with Node's TypeScript parser. JSON dictionaries parsed. This does not compile Svelte templates or perform semantic TypeScript checking.
 - `git diff --check` and whitespace checks across changed/untracked source files passed.
+- GitHub Verify run [38722942797](https://github.com/2-sa/Switcher/actions/runs/38722942797) passed on commit `69877c1ed73054c7ff301b943b6530434b1e3fde`: generated bindings, Svelte/TypeScript checking, Vitest, frontend production build, full Go suite, and Windows application build. The run took 4m41s. Artifact `switcher-windows-unsigned` is available as [artifact 11966333517](https://github.com/2-sa/Switcher/actions/runs/38722942797/artifacts/11966333517); it is a test executable, not a signed release. No native application has been installed or run locally.
 - Reviewed a separate browser design preview with sample data: Arabic/English direction, platform/account/settings layouts, full and compact sidebar, and no document horizontal overflow at 600px width. Captured Arabic and English images. This preview reuses the palette/layout CSS but is not the running Wails application and does not prove native integrations.
 
 Preview artifacts are outside the repository under `C:/Users/PC/.codex/visualizations/2026/10/15/01a13efc-f407-7740-b711-978244d25d3e/`: `redesign-preview.html`, `redesign-ar.jpg`, and `redesign-en.jpg`. A temporary loopback preview runs at `http://127.0.0.1:8347/`.
@@ -129,9 +130,7 @@ Preview artifacts are outside the repository under `C:/Users/PC/.codex/visualiza
 
 No known newly orphaned source remains. Keep validation items below until actual evidence resolves them.
 
-- First Verify run (`38721926769`, commit `c6cb46ea`) passed binding generation, Svelte/TypeScript checking, frontend tests, and frontend production build. Go tests stopped in existing shortcut/backup tests: runner temporary paths used `C:/Users/RUNNER~1/...`, while canonical paths use the full profile name. The workflow now sets TEMP/TMP to RUNNER_TEMP using an initial step and GITHUB_ENV; verify this environment correction with a fresh full run. The first correction (`44adb716`) placed the runner context at job-env scope, which GitHub rejects; this has been corrected to runtime initialization. No protection checks or failing tests were disabled.
-- Full Go-suite success and Windows executable compilation remain pending. Nothing has been installed locally.
-- Record any CI failures and distinguish pre-existing failures from redesign regressions; fix supported regressions before accepting the build.
+- Resolved CI failures: first run `38721926769` used `C:/Users/RUNNER~1/...` temporary paths, causing existing shortcut/backup path comparisons to fail. Initial correction `44adb716` used a runner context at unsupported job-env scope; `69877c1e` instead exports TEMP/TMP from RUNNER_TEMP through GITHUB_ENV in a startup step. The complete Go suite and executable build then passed in run `38722942797`. No protection checks or failing tests were disabled.
 - Visually inspect the real Windows build: all routes, Steam games/tools, Guard enrollment/unlock/restore, error/loading/empty states, search/context menus, dialogs, drag ordering, keyboard/gamepad controls, and actual account switching.
 - Validate saved custom backgrounds and representative dark/light themes in the real application; the sample preview covers the new default palette only.
 - Baseline native screenshots were unavailable in this environment. Other OS runtime behavior is unverified.
