@@ -106,7 +106,7 @@
 
 <SettingsGroup title={$t("Settings_Header_TraySettings")}>
   <SettingsField label={$t("Settings_TrayMax")} forId="gp-tray-max">
-    <input
+    <input dir="ltr"
       id="gp-tray-max"
       type="number"
       min="0"
@@ -127,7 +127,7 @@
     />
   </div>
   <SettingsField label={$t("Settings_ProfileImageExpiryDays")} forId="gp-image-expiry">
-    <input
+    <input dir="ltr"
       id="gp-image-expiry"
       type="number"
       min="1"

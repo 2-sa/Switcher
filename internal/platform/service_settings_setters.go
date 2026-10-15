@@ -17,7 +17,7 @@ func (p *PlatformService) SetLanguage(code string) error {
 	return p.withSettingsWrite(func(s *AppSettings) error {
 		s.Language = strings.TrimSpace(code)
 		if s.Language == "" {
-			s.Language = "en-US"
+			s.Language = defaultLanguage
 		}
 		return nil
 	})

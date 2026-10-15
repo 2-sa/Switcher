@@ -102,7 +102,7 @@
     <label class="vault-auth__field">
       <span>{$t("SteamGuard_Factor_Password")}</span>
       <!-- svelte-ignore a11y-autofocus -->
-      <input
+      <input dir="ltr"
         class="modal-input"
         type="password"
         autocomplete="off"

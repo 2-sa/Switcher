@@ -1,0 +1,76 @@
+name: Verify
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Check, test, and build Windows
+    runs-on: windows-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      WAILS3_VERSION: v3.0.0-beta.16
+      CGO_ENABLED: '0'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install pnpm and Wails
+        run: |
+          npm install -g pnpm@11.0.8
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          go install "github.com/wailsapp/wails/v3/cmd/wails3@$env:WAILS3_VERSION"
+
+      - name: Install frontend dependencies
+        run: pnpm --dir frontend install --frozen-lockfile
+
+      - name: Generate Wails bindings
+        run: wails3 generate bindings -f "-tags production,devtools" -clean=true -ts
+
+      - name: Check Svelte and TypeScript
+        run: pnpm --dir frontend run check
+
+      - name: Test frontend
+        run: pnpm --dir frontend run test
+
+      - name: Build frontend
+        run: pnpm --dir frontend run build
+        env:
+          PRODUCTION: 'true'
+
+      - name: Test Go
+        run: go test ./...
+
+      - name: Build Windows application
+        run: wails3 task windows:build
+
+      - name: Upload unsigned test build
+        uses: actions/upload-artifact@v7
+        with:
+          name: switcher-windows-unsigned
+          path: bin/TcNo-Acc-Switcher.exe
+          if-no-files-found: error
+          retention-days: 7

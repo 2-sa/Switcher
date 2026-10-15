@@ -334,7 +334,7 @@
 
 <SettingsGroup title={$t("Settings_Header_TraySettings")}>
   <SettingsField label={$t("Settings_TrayMax")} forId="ps-tray-max">
-    <input
+    <input dir="ltr"
       id="ps-tray-max"
       type="number"
       min="0"
@@ -368,7 +368,7 @@
     />
   </div>
   <SettingsField label={$t("Settings_ImageExpiry")} forId="ps-image-expiry">
-    <input
+    <input dir="ltr"
       id="ps-image-expiry"
       type="number"
       min="0"

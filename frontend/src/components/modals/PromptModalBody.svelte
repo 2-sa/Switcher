@@ -71,7 +71,7 @@
   />
   <div class="modal-input-row">
     {#if inputType === "password"}
-      <input
+      <input dir="ltr"
         bind:this={inputEl}
         bind:value
         type="password"

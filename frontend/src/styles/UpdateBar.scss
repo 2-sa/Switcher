@@ -21,7 +21,7 @@
 .updateBar__close {
   padding: 0 1em;
   position: absolute;
-  right: 0;
+  inset-inline-end: 0;
   top: 0;
   height: 2rem;
   line-height: 2rem;

@@ -23,6 +23,33 @@ var defaultOnFields = []struct {
 	{"controllerSupportEnabled", func(s AppSettings) bool { return s.ControllerSupportEnabled }, func(s *AppSettings, v bool) { s.ControllerSupportEnabled = v }},
 }
 
+func TestDefaultLanguageAndSavedPreference(t *testing.T) {
+	for _, language := range []string{"", "en-US", "ar-SA"} {
+		t.Run("saved="+language, func(t *testing.T) {
+			dir := testExeDirWithPortable(t)
+			s := defaultSettings()
+			if s.Language != "ar-SA" {
+				t.Fatalf("fresh language = %q, want ar-SA", s.Language)
+			}
+			s.Language = language
+			if err := SaveAppSettings(dir, s); err != nil {
+				t.Fatal(err)
+			}
+			loaded, err := LoadAppSettings(dir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := language
+			if want == "" {
+				want = "ar-SA"
+			}
+			if loaded.Language != want {
+				t.Fatalf("language = %q, want %q", loaded.Language, want)
+			}
+		})
+	}
+}
+
 func TestSwitchingADefaultOnSettingOffSurvivesASave(t *testing.T) {
 	for _, field := range defaultOnFields {
 		t.Run(field.name, func(t *testing.T) {
@@ -79,8 +106,8 @@ func TestSavingStillNormalisesShape(t *testing.T) {
 	if loaded.Version == 0 {
 		t.Error("Version left at 0")
 	}
-	if loaded.Language != "en-US" {
-		t.Errorf("Language = %q, want en-US", loaded.Language)
+	if loaded.Language != "ar-SA" {
+		t.Errorf("Language = %q, want ar-SA", loaded.Language)
 	}
 	if loaded.AppBgAlignment == "nonsense" {
 		t.Error("AppBgAlignment kept a value outside its set")

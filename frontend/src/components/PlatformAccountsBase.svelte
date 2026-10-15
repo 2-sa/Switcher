@@ -1246,7 +1246,7 @@
                     class:acc_name--vac={nameStatus?.kind === "vac"}
                     class:acc_name--limited={nameStatus?.kind === "limited"}
                     title={nameStatus?.label}
-                  >{$censoredName(adapter.name(acc))}</h6>
+                  ><bdi>{$censoredName(adapter.name(acc))}</bdi></h6>
 
                   {#if a11yDescription}
                     <span id={descId} class="sr-only">{a11yDescription}</span>

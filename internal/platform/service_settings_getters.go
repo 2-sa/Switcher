@@ -9,7 +9,7 @@ func (p *PlatformService) GetLanguage() (string, error) {
 	err := p.withSettingsRead(func(s *AppSettings) error {
 		lang = s.Language
 		if lang == "" {
-			lang = "en-US"
+			lang = defaultLanguage
 		}
 		return nil
 	})

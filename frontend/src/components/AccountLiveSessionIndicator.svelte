@@ -26,7 +26,7 @@
   .live-session-badge {
     position: absolute;
     top: 6px;
-    left: 6px;
+    inset-inline-start: 6px;
     z-index: 3;
     width: 9px;
     height: 9px;

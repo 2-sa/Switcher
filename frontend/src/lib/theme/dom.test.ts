@@ -183,7 +183,7 @@ describe("Windows accent live updates", () => {
     currentWindowsThemeAccentColor.set("");
 
     applyResolvedAccent(DEFAULT_THEME_ID, WINDOWS_THEME_ACCENT_KEY, "");
-    expect(cssVar(getAccentOverlayCss(), "--accent")).toBe("#80ffea");
+    expect(cssVar(getAccentOverlayCss(), "--accent")).toBe("#8baef2");
 
     ensureWindowsAccentSubscription();
     ensureWindowsAccentSubscription();

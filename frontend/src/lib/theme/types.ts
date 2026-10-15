@@ -24,12 +24,13 @@ export type ThemeOption = {
 
 export const DEFAULT_THEME_OPTION: ThemeOption = {
   id: DEFAULT_THEME_ID,
-  label: "Dracula Cyan (Default)",
+  label: "Switcher Slate (Default)",
   googleFontsCss: null,
   backgroundUrl: null,
-  defaultAccentColor: "#80ffea",
-  defaultAccentKey: "cyan",
+  defaultAccentColor: "#8baef2",
+  defaultAccentKey: "blue",
   accents: [
+    { id: "blue", label: "Blue", color: "#8baef2" },
     { id: "cyan", label: "Cyan", color: "#80ffea" },
     { id: "green", label: "Green", color: "#8aff80" },
     { id: "orange", label: "Orange", color: "#ffca80" },

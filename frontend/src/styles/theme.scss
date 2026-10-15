@@ -1,22 +1,22 @@
 /*
-    Dracula Cyan (Default) theme
+    Switcher Slate (Default) theme
     - Created by TroubleChute
 
     This file is temporarily here before theming is implemented properly.
 */
 :root {
-    --code: #263440;
-    --code-background: #131a20;
+    --code: #222833;
+    --code-background: #191d25;
     --slightly-darker-code-background: hsl(208, 25%, 6%);
-    --darker-code-background: #0f151a;
-    --even-darker-code-background: rgb(6, 8, 10);
+    --darker-code-background: #15181e;
+    --even-darker-code-background: #14171d;
     --shadow: 0 4px 10px -6px #010101;
     --black: #21222c;
     --blackSecondary: #414558;
-    --blackTernary: #a7abbe;
+    --blackTernary: #aab5c5;
     --blackLight: hsla(230,15%,15%,5%);
-    --white: #f8f8f2;
-    --whiteSecondary: #fff;
+    --white: #edf1f7;
+    --whiteSecondary: #edf1f7;
     --whiteLight: hsla(60,30%,96%,5%);
     --cyan: #80ffea;
     --cyanSecondary: #ccfff6;
@@ -47,21 +47,21 @@
 
     // All these extra accent steps and redefinitions are required for Windows accent options
     // Elements that use these will be set by either Windows Accent or Theme
-    --accent: var(--cyan); /* Must be HEX */
-    --accentHS: 190, 100%; /* "H, S%" from accent as HSL */
-    --accentL: 50%; /* "L" from accent HSL */
-    --accentInt: 128, 254, 234; /* accent as "r, g, b" for default --cyan */
+    --accent: #8baef2; /* Must be HEX */
+    --accentHS: 220, 80%; /* "H, S%" from accent as HSL */
+    --accentL: 75%; /* "L" from accent HSL */
+    --accentInt: 139, 174, 242;
     --border-bar-bg: var(--code);
-    --border-bar-size: 7px;
-    --program-bg: linear-gradient(90deg, #11181d, #0e1419 100%);
-    --mainContentBackground: #11181d;
-    --footer-bg: var(--black);
+    --border-bar-size: 1px;
+    --program-bg: #15181e;
+    --mainContentBackground: #15181e;
+    --footer-bg: #191d25;
     --scrollbar-track-bg: #1E2934;
-    --button-bg: #274560;
-    --button-bg-hover: #28374E;
+    --button-bg: #2a3342;
+    --button-bg-hover: #354157;
     --tooltip-bg: var(--even-darker-code-background);
     --main-padding: .75rem;
-    --document-canvas-bg: #1b2636;
+    --document-canvas-bg: #15181e;
 
     --pure-black: #000;
     --shadow-color-heavy: rgba(0, 0, 0, 0.84);
@@ -96,7 +96,7 @@
     --text-dim-gray: #6b6a6a;
     /* Settings notes and hints use this, so it is body text and owes the reader
        4.5:1. */
-    --text-body-muted: #9d9d9d;
+    --text-body-muted: #aab5c5;
     --tag-default-bg: #555555;
     --surface-glass-06-15: linear-gradient(145deg, var(--overlay-white-08), rgba(0, 0, 0, 0.15));
     --surface-row-dark: #252a2e;
@@ -130,7 +130,7 @@
     --error-solid: #ff0000;
     --success-soft-bg: #00990022;
     --error-soft-bg: #ff000033;
-    --overlay-panel-bg: rgba(20, 32, 52, 0.95);
+    --overlay-panel-bg: #222833;
     --overlay-scrim-deep: rgba(8, 12, 22, 0.72);
 
     /* RGB tuples for tinted shadows / glows (match --green / --orange / --red) */

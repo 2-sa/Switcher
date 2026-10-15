@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	defaultLanguage          = "ar-SA"
 	settingsFileName         = settingsfile.FileName
 	defaultPrereleaseUpdates = true
 )
@@ -179,7 +180,7 @@ type AppBackgroundInfo struct {
 func defaultSettings() AppSettings {
 	return AppSettings{
 		Version:                  1,
-		Language:                 "en-US",
+		Language:                 defaultLanguage,
 		PlatformExePaths:         map[string]string{},
 		PlatformOrder:            nil,
 		DisabledPlatforms:        nil,
@@ -210,7 +211,7 @@ func normalizeAppSettingsShape(s *AppSettings) {
 		s.Version = 1
 	}
 	if s.Language == "" {
-		s.Language = "en-US"
+		s.Language = defaultLanguage
 	}
 	if s.PlatformExePaths == nil {
 		s.PlatformExePaths = map[string]string{}

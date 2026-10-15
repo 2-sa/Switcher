@@ -22,11 +22,13 @@
   import ContextMenu from './components/ContextMenu.svelte'
   import BackgroundDropZones from './components/BackgroundDropZones.svelte'
   import ActionBar from './components/ActionBar.svelte'
+  import Sidebar from './components/Sidebar.svelte';
+  import { steamPageTab } from "./stores/steamPageTab";
   import { route, navDirection, applyNavigateJSON, navigateBackLikeButton, navigateForward } from './stores/nav'
   import { installPageStatsTracking } from "./lib/pageStatsTrack";
   import { loadPageModule, prefetchCommonPages } from "./lib/pageLoaders";
   import { actionBarStatus } from './stores/fileDrop'
-  import { t } from "./stores/i18n";
+  import { isRtl, t } from "./stores/i18n";
   import { NotifyLaunchUpdateCheck } from "../bindings/TcNo-Acc-Switcher/internal/platform/platformservice.js";
   import * as PlatformService from "../bindings/TcNo-Acc-Switcher/internal/platform/platformservice.js";
   import { pushToast } from "./stores/toast";
@@ -530,7 +532,7 @@
   <FileDropOverlay />
   <UserDataMoveOverlay />
   <ContextMenu />
-  <a class="skip-link" href="#app-main">Skip to content</a>
+  <a class="skip-link" href="#app-main">{$t("Shell_SkipToContent")}</a>
   <TitleBar />
   <UpdateBar />
   <div class="page" class:page--alert={$pageFrameAlert} class:page--has-bg={!!activeBg}>
@@ -548,7 +550,30 @@
         />
       {/if}
     {/key}
+    <div class="workspace">
+      {#if $route.page !== "steam-browser" && $route.page !== "steam-confirmations"}
+        <Sidebar />
+      {/if}
     <div class="page-content-wrapper">
+      {#if $route.page === "home" || $route.page === "platform"}
+        <header class="workspace-heading">
+          <div>
+            <h1>{#if $route.page === "home"}{$t("Shell_Platforms")}{:else}<bdi>{$route.platformName}</bdi>{/if}</h1>
+            <p>{$t($route.page === "home" ? "Shell_PlatformsHint" : $route.platformName === "Steam" && $steamPageTab === "games" ? "Shell_GamesHint" : "Shell_AccountsHint")}</p>
+          </div>
+          {#if $route.page === "home"}
+            <button class="workspace-search" type="button" on:click={() => openSearchOverlay()}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
+              {$t("Context_Search")}
+            </button>
+          {:else if $route.platformName === "Steam"}
+            <div class="workspace-tabs" role="group" aria-label={$t("Shell_View")}>
+              <button type="button" aria-pressed={$steamPageTab === "switcher"} on:click={() => steamPageTab.set("switcher")}>{$t("Shell_Accounts")}</button>
+              <button type="button" aria-pressed={$steamPageTab === "games"} on:click={() => steamPageTab.set("games")}>{$t("Shell_Games")}</button>
+            </div>
+          {/if}
+        </header>
+      {/if}
       <div class="page-stage">
       {#key $route.page + ("platformName" in $route ? $route.platformName : "")}
         <main
@@ -556,14 +581,14 @@
           class="page-content"
           tabindex="-1"
           in:fly={{
-            x: motionEnabled() ? $navDirection * 22 : 0,
+            x: motionEnabled() ? $navDirection * ($isRtl ? -22 : 22) : 0,
             duration: motionEnabled() ? DUR.normal + 40 : 0,
             delay: motionEnabled() ? 40 : 0,
             opacity: 0,
             easing: EASE.default,
           }}
           out:fly={{
-            x: motionEnabled() ? $navDirection * -14 : 0,
+            x: motionEnabled() ? $navDirection * ($isRtl ? 14 : -14) : 0,
             duration: motionEnabled() ? DUR.fast : 0,
             opacity: 0,
             easing: EASE.default,
@@ -601,6 +626,7 @@
         <ActionBar />
       {/if}
     </div>
+    </div>
     <BackgroundDropZones />
     <AppLockOverlay />
     <SecurityProgressOverlay />
@@ -627,7 +653,7 @@
      sliver of the accent border across the top of the window. */
   .skip-link {
     position: absolute;
-    left: 1rem;
+    inset-inline-start: 1rem;
     top: 1rem;
     z-index: 1000000;
     clip-path: inset(100%);

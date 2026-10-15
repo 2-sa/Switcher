@@ -1,5 +1,4 @@
-/* Thank you https://github.com/Majoramari
-   Only active when <html dir="rtl"> (set from i18n for RTL locales). */
+/* Direction follows the selected locale; positioning owned by JS stays physical. */
 html[dir="rtl"] {
   .row,
   ul.contextmenu,
@@ -7,9 +6,7 @@ html[dir="rtl"] {
   #window-title span,
   .rightContent,
   .infoWindow .rightContent {
-    direction: rtl !important;
-    margin-left: 0em;
-    margin-right: 1em;
+    direction: rtl;
   }
 
   .linksList {
@@ -20,11 +17,6 @@ html[dir="rtl"] {
     margin: 0 !important;
   }
 
-  label {
-    margin-right: 0.5em;
-    margin-left: 0em;
-  }
-
   .linksList a svg {
     margin-right: 0;
   }
@@ -32,11 +24,11 @@ html[dir="rtl"] {
   .modalIcoGitHub,
   .modalIcoNetworking,
   .modalIcoDoc {
-    margin-left: 0.5rem;
+    margin-inline-end: 0.5rem;
   }
 
   #window-controls-modal {
-    right: unset;
-    left: 0;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
   }
 }

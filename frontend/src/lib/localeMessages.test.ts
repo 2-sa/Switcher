@@ -4,7 +4,27 @@ import { describe, expect, it } from "vitest";
 import localeKeys from "virtual:locale-keys";
 import deDE from "../Resources/de-DE.json";
 import { buildKeyIndex, localeValues } from "../../vite-plugin-locale-values";
-import { zipMessages } from "./localeMessages";
+import { resolveLocale, zipMessages } from "./localeMessages";
+
+describe("resolveLocale", () => {
+  const available = ["ar-SA", "en-US", "de-DE"];
+
+  it("starts in Arabic when no language is saved", () => {
+    expect(resolveLocale(null, available)).toBe("ar-SA");
+  });
+
+  it("preserves explicit English and other saved languages", () => {
+    expect(resolveLocale("en-US", available)).toBe("en-US");
+    expect(resolveLocale("de-DE", available)).toBe("de-DE");
+  });
+
+  it("uses an available fallback for missing or unsupported locales", () => {
+    expect(resolveLocale("unknown", available)).toBe("ar-SA");
+    expect(resolveLocale(null, ["de-DE", "en-US"])).toBe("en-US");
+    expect(resolveLocale(null, ["de-DE"])).toBe("de-DE");
+    expect(resolveLocale(null, [])).toBe("ar-SA");
+  });
+});
 
 // The plugin has already turned this into a positional array; resolveJsonModule
 // still types it as the source object.

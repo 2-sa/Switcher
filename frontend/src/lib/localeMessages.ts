@@ -19,3 +19,10 @@ export function zipMessages(
   }
   return messages;
 }
+
+export function resolveLocale(wanted: string | null, available: readonly string[]): string {
+  if (wanted && available.includes(wanted)) return wanted;
+  if (available.includes("ar-SA")) return "ar-SA";
+  if (available.includes("en-US")) return "en-US";
+  return available[0] ?? "ar-SA";
+}

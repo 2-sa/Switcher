@@ -26,14 +26,15 @@
   pointer-events: auto;
   position: relative;
   width: 100%;
-  padding: 0.65rem 2.25rem 0.65rem 0.65rem;
+  padding-block: 0.65rem;
+  padding-inline: 0.65rem 2.25rem;
 
   border-radius: var(--notification-border-radius, 2px);
   border: 1px solid transparent;
   box-shadow: var(--shadow, 0 4px 14px var(--shadow-color-35));
   background: var(--notification-main-bg, var(--darker-code-background, #0f151a));
   color: var(--notification-message-fg, var(--white, #f8f8f2));
-  text-align: left;
+  text-align: start;
 
   user-select: text;
   -webkit-user-select: text;
@@ -43,7 +44,7 @@
 
 .toast--success {
   border-color: var(--notification-border, var(--modal-border, var(--border-bar-bg, transparent)));
-  border-left-color: var(--notification-success-border, var(--green, #8aff80));
+  border-inline-start-color: var(--notification-success-border, var(--green, #8aff80));
   box-shadow:
     var(--shadow, 0 4px 14px var(--shadow-color-35)),
     0 0 0 1px rgba(var(--greenInt), 0.12);
@@ -58,7 +59,7 @@
 
 .toast--warning {
   border-color: var(--notification-border, var(--modal-border, var(--border-bar-bg, transparent)));
-  border-left-color: var(--notification-warning-border, var(--orange, #ffca80));
+  border-inline-start-color: var(--notification-warning-border, var(--orange, #ffca80));
   box-shadow:
     var(--shadow, 0 4px 14px var(--shadow-color-35)),
     0 0 0 1px rgba(var(--orangeInt), 0.12);
@@ -73,7 +74,7 @@
 
 .toast--error {
   border-color: var(--notification-border, var(--modal-border, var(--border-bar-bg, transparent)));
-  border-left-color: var(--notification-error-border, var(--red, #ff9580));
+  border-inline-start-color: var(--notification-error-border, var(--red, #ff9580));
   box-shadow:
     var(--shadow, 0 4px 14px var(--shadow-color-35)),
     0 0 0 1px rgba(var(--redInt), 0.12);
@@ -88,7 +89,7 @@
 
 .toast--info {
   border-color: var(--notification-border, var(--modal-border, var(--border-bar-bg, transparent)));
-  border-left-color: var(--notification-info-border, var(--accent));
+  border-inline-start-color: var(--notification-info-border, var(--accent));
   box-shadow:
     var(--shadow, 0 4px 14px var(--shadow-color-35)),
     0 0 0 1px var(--accent-fill-very-soft);
@@ -124,7 +125,7 @@
 
 .toast__count {
   position: absolute;
-  left: -1rem;
+  inset-inline-start: -1rem;
   top: -1rem;
   min-width: 2rem;
   height: 2rem;
@@ -143,7 +144,7 @@
 
 .toast__close {
   position: absolute;
-  right: 0.2rem;
+  inset-inline-end: 0.2rem;
   top: 0.2rem;
   display: flex;
   align-items: center;

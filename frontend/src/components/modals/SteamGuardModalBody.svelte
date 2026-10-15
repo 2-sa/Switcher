@@ -2613,7 +2613,7 @@
       <p>{$t("SteamGuard_Unlock_Body")}</p>
       <label class="steam-guard__field" for="steam-guard-password">
         <span>{$t("SteamGuard_Field_Password")}</span>
-        <input
+        <input dir="ltr"
           id="steam-guard-password"
           class="modal-input"
           bind:value={password}
@@ -3039,7 +3039,7 @@
           </label>
           <label class="steam-guard__field" for="steam-add-password">
             <span>{$t("SteamGuard_Field_SteamPassword")}</span>
-            <input id="steam-add-password" class="modal-input" bind:value={authPassword} type="password" autocomplete="current-password" disabled={busy} />
+            <input dir="ltr" id="steam-add-password" class="modal-input" bind:value={authPassword} type="password" autocomplete="current-password" disabled={busy} />
           </label>
           {#if inlineError}<p class="steam-guard__error" role="alert">{inlineError}</p>{/if}
           <p class="steam-guard__hint">{$t("SteamGuard_AddAccount_As")}</p>
@@ -3128,7 +3128,7 @@
 					: $t("SteamGuard_Enrollment_VaultCreateBody")}</p>
 				<label class="steam-guard__field" for="steam-enrollment-vault-password">
 					<span>{$t("SteamGuard_Field_Password")}</span>
-					<input id="steam-enrollment-vault-password" class="modal-input" bind:value={vaultPassword} type="password" autocomplete={vaultStatus.configured ? "current-password" : "new-password"} disabled={busy} data-steamguard-autofocus use:focusOnShow={!busy} on:keydown={(event) => runOnEnter(event, submitVaultPreparation)} />
+					<input dir="ltr" id="steam-enrollment-vault-password" class="modal-input" bind:value={vaultPassword} type="password" autocomplete={vaultStatus.configured ? "current-password" : "new-password"} disabled={busy} data-steamguard-autofocus use:focusOnShow={!busy} on:keydown={(event) => runOnEnter(event, submitVaultPreparation)} />
 				</label>
 				{#if vaultStatus.configured}
 					<div class="steam-guard__check">
@@ -3153,12 +3153,12 @@
 					<p class="steam-guard__hint">{$t("SteamGuard_Enrollment_VaultHint")}</p>
 					<label class="steam-guard__field" for="steam-enrollment-vault-confirmation">
 						<span>{$t("SteamGuard_Field_ConfirmPassword")}</span>
-						<input id="steam-enrollment-vault-confirmation" class="modal-input" bind:value={vaultPasswordConfirmation} type="password" autocomplete="new-password" disabled={busy} on:keydown={(event) => runOnEnter(event, submitVaultPreparation)} />
+						<input dir="ltr" id="steam-enrollment-vault-confirmation" class="modal-input" bind:value={vaultPasswordConfirmation} type="password" autocomplete="new-password" disabled={busy} on:keydown={(event) => runOnEnter(event, submitVaultPreparation)} />
 					</label>
 					{#if vaultStatus.savedAccountDataEncrypted}
 						<label class="steam-guard__field" for="steam-enrollment-app-password">
 							<span>{$t("SteamGuard_Field_AppPassword")}</span>
-							<input id="steam-enrollment-app-password" class="modal-input" bind:value={vaultAppPassword} type="password" autocomplete="current-password" disabled={busy} on:keydown={(event) => runOnEnter(event, submitVaultPreparation)} />
+							<input dir="ltr" id="steam-enrollment-app-password" class="modal-input" bind:value={vaultAppPassword} type="password" autocomplete="current-password" disabled={busy} on:keydown={(event) => runOnEnter(event, submitVaultPreparation)} />
 						</label>
 						<p class="steam-guard__hint">{$t("SteamGuard_Enrollment_AppPasswordHint")}</p>
 					{/if}
@@ -3212,7 +3212,7 @@
 						</label>
 						<label class="steam-guard__field" for="steam-enrollment-password">
 							<span>{$t("SteamGuard_Field_SteamPassword")}</span>
-							<input id="steam-enrollment-password" class="modal-input" bind:value={authPassword} type="password" autocomplete="current-password" disabled={busy} data-steamguard-autofocus use:focusOnShow={!busy} on:keydown={(event) => runOnEnter(event, beginCredentialLogin)} />
+							<input dir="ltr" id="steam-enrollment-password" class="modal-input" bind:value={authPassword} type="password" autocomplete="current-password" disabled={busy} data-steamguard-autofocus use:focusOnShow={!busy} on:keydown={(event) => runOnEnter(event, beginCredentialLogin)} />
 						</label>
 					</div>
 				</div>
@@ -3418,7 +3418,7 @@
 			<div class="steam-guard__stack">
 				<p>{authMessage || $t("SteamGuard_LoginAgain_TokenRejected")}</p>
 				<label class="steam-guard__field" for="steam-login-account"><span>{$t("SteamGuard_Field_SteamAccountName")}</span><input id="steam-login-account" class="modal-input" bind:value={authAccountName} autocomplete="username" disabled={busy} on:keydown={(event) => runOnEnter(event, beginCredentialLogin)} /></label>
-				<label class="steam-guard__field" for="steam-login-password"><span>{$t("SteamGuard_Field_SteamPassword")}</span><input id="steam-login-password" class="modal-input" bind:value={authPassword} type="password" autocomplete="current-password" disabled={busy} data-steamguard-autofocus use:focusOnShow={!busy} on:keydown={(event) => runOnEnter(event, beginCredentialLogin)} /></label>
+				<label class="steam-guard__field" for="steam-login-password"><span>{$t("SteamGuard_Field_SteamPassword")}</span><input dir="ltr" id="steam-login-password" class="modal-input" bind:value={authPassword} type="password" autocomplete="current-password" disabled={busy} data-steamguard-autofocus use:focusOnShow={!busy} on:keydown={(event) => runOnEnter(event, beginCredentialLogin)} /></label>
 				<!-- Cancel leaves the login-again flow entirely: the renewal that
 				     precedes this form has already finished by the time it shows, so
 				     staying on this screen would strand the user on its "Refreshing…"
@@ -3472,7 +3472,7 @@
       <form class="steam-guard__stack" on:submit|preventDefault={submitExport}>
         <label class="steam-guard__field" for="steam-guard-export-password">
           <span>{$t("SteamGuard_Field_ConfirmVaultPassword")}</span>
-          <input
+          <input dir="ltr"
             id="steam-guard-export-password"
             class="modal-input"
             bind:value={exportPassword}
@@ -3487,7 +3487,7 @@
         </label>
         <label class="steam-guard__field" for="steam-guard-export-mafile-password">
           <span>{$t("SteamGuard_Field_MaFilePassword")}</span>
-          <input
+          <input dir="ltr"
             id="steam-guard-export-mafile-password"
             class="modal-input"
             bind:value={exportMaFilePassword}

@@ -6,7 +6,8 @@
   import { route, appBarTitle } from "../stores/nav";
   import { platformListSort, type PlatformSortKind } from "../stores/platformListSort";
   import { t } from "../stores/i18n";
-  import { openConfirm, openFeedbackModal, openFolderPicker } from "../stores/modal";
+  import { openConfirm, openFeedbackModal } from "../stores/modal";
+  import { openPlatformPage } from "../lib/platformLaunch";
   import { pushToast } from "../stores/toast";
   import * as PlatformService from "../../bindings/TcNo-Acc-Switcher/internal/platform/platformservice.js";
   import type { PlatformStartup } from "../../bindings/TcNo-Acc-Switcher/internal/platform/models.js";
@@ -36,6 +37,9 @@
 
   let startup: PlatformStartup | null = get(homeScreenData);
   let homeOrder: string[] = startup?.homePlatformOrder ?? [];
+  $: if (startup) {
+    homeScreenData.update((current) => current ? { ...current, homePlatformOrder: homeOrder } : current);
+  }
   let disabledPlatformNames: string[] = startup?.disabledPlatformNames ? [...startup.disabledPlatformNames] : [];
   let loadError: string | null = null;
 
@@ -124,43 +128,11 @@
     }
   }
 
-  async function tryResolvePlatform(name: string): Promise<boolean> {
-    const r = await PlatformService.ResolvePlatformLaunch(name);
-    if (r.ok) {
-      if (r.foundViaShortcut) {
-        pushToast({
-          type: "success",
-          title: "",
-          message: $t("Toast_FoundExeViaShortcut"),
-          duration: 30000,
-        });
-      }
-      route.set({ page: "platform", platformName: name });
-      return true;
-    }
-    if (r.needsManualLocate) {
-      const picked = await openFolderPicker({
-        title: $t("Modal_Title_LocatePlatform", { platform: name }),
-        body: `<p>${$t("Modal_LocatePlatform", { platformExe: r.soughtExeName })}</p>`,
-        initialPath: r.initialPath ?? "",
-        dirsOnly: false,
-        soughtFilename: r.soughtExeName,
-        positiveLabel: $t("Modal_Button_Select"),
-      });
-      if (picked) {
-        await PlatformService.ConfirmPlatformExePath(name, picked);
-        route.set({ page: "platform", platformName: name });
-        return true;
-      }
-    }
-    return false;
-  }
-
   async function openPlatform(name: string): Promise<void> {
     if (navigating) return;
     navigating = true;
     try {
-      await tryResolvePlatform(name);
+      await openPlatformPage(name);
     } catch (e) {
       loadError = e instanceof Error ? e.message : String(e);
     } finally {
@@ -431,7 +403,7 @@
             <!-- svelte-ignore a11y-no-static-element-interactions -->
             <div class="platform_tile_ctx" use:contextMenu={() => tileContextMenu(rid)}>
               <div class="fgText {textClass(label)}">
-                <p>{label.toUpperCase()}</p>
+                <p><bdi>{label}</bdi></p>
               </div>
               <div class="fgImg" aria-hidden="true">
                 <svg viewBox="0 0 500 500" aria-hidden="true">

@@ -75,7 +75,7 @@
 
   <label class="modal-field">
     <span>{$t("Security_Password")}</span>
-    <input
+    <input dir="ltr"
       bind:this={passwordEl}
       bind:value={password}
       type="password"
@@ -89,7 +89,7 @@
 
   <label class="modal-field">
     <span>{$t("Security_ConfirmPassword")}</span>
-    <input
+    <input dir="ltr"
       bind:this={confirmEl}
       bind:value={confirm}
       type="password"

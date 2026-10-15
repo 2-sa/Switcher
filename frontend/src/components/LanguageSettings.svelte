@@ -73,7 +73,7 @@
           {#each availableLocales as code}
             <li role="none">
               <button type="button" class="dropdown-item" on:click={() => void pick(code)}>
-                {code} - {nameFor(code)}
+                <bdi>{code}</bdi> — <bdi>{nameFor(code)}</bdi>
               </button>
             </li>
           {/each}

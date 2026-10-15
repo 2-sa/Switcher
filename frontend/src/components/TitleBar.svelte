@@ -1,12 +1,11 @@
 <script lang="ts">
     import { route, navigateBackLikeButton } from '../stores/nav'
-    import { t } from "../stores/i18n";
+    import { isRtl, t } from "../stores/i18n";
     import { onMount } from 'svelte'
     import { appBarTitle } from '../stores/nav'
     import { activeModal } from '../stores/modal'
     import { contextMenu } from '../stores/contextMenu'
     import { searchOverlayCtrl } from '../stores/searchOverlay'
-    import { steamPageTab, toggleSteamPageTab } from '../stores/steamPageTab'
     import { Events, Window } from "@wailsio/runtime";
     import { gameMode } from '../stores/osCapabilities'
 
@@ -87,10 +86,6 @@
         return $appBarTitle
     })()
 
-    $: showSteamTab = $route.page === "platform" && $route.platformName === "Steam"
-    // The button names where a click goes, not where you are.
-    $: steamTabLabel = $steamPageTab === "games" ? $t("Steam_Tab_Switcher") : $t("Steam_Tab_Games")
-
     function backClick() {
         if ($route.page === 'home') {
             const axis = possibleAnimations[Math.floor(Math.random() * possibleAnimations.length)]
@@ -106,7 +101,7 @@
     }
 </script>
 
-<header class="headerbar">
+<header class="headerbar" dir="ltr">
     <span class="title-left">
         {#if $route.page !== "steam-confirmations"}
             <button
@@ -119,7 +114,7 @@
                 on:click={backClick}
             >
                 <svg
-                style:transform={backSpin}
+                style:transform={`${backSpin} ${$isRtl ? "scaleX(-1)" : ""}`}
                 style:transition={backTransition}
                 style:transform-origin="center"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free v5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"/></svg>
@@ -128,17 +123,8 @@
         <svg class="header_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 264" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
             <use href="img/TcNo_Logo_Flat.svg#logo"></use>
         </svg>
-        {#if showSteamTab}
-            <button
-                type="button"
-                class="header_tab"
-                title={$t("Steam_Tab_SwitchTo", { tab: steamTabLabel })}
-                aria-label={$t("Steam_Tab_SwitchTo", { tab: steamTabLabel })}
-                on:click={toggleSteamPageTab}
-            >{steamTabLabel}</button>
-        {/if}
     </span>
-    <span id="title-label" class="title-drag">
+    <span id="title-label" class="title-drag" dir="auto">
         {titleLabel}
     </span>
     <span class="window-controls" role="toolbar">
@@ -272,33 +258,6 @@
         margin: 12px;
         display: block;
         fill: var(--whiteSecondary);
-    }
-    .header_tab {
-        --wails-draggable: no-drag;
-        align-self: center;
-        /* Centre the label on the box rather than leaving it on a line box.
-           line-height 1.4 split the leading 3px above and 3.4px below, and an
-           all-caps label puts no glyphs in the descender space, so the text sat
-           visibly high inside a button whose own box was already centred. */
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 20px;
-        padding: 0 10px;
-        border: 1px solid var(--button-bg);
-        border-radius: 3px;
-        background: var(--button-bg);
-        color: var(--whiteSecondary);
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        line-height: 1;
-
-        &:hover {
-            background: var(--button-bg-hover, var(--button-bg));
-            border-color: var(--accent);
-        }
     }
     .window-controls {
         --wails-draggable: no-drag;

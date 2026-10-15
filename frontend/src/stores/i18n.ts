@@ -1,7 +1,7 @@
 import { derived, writable } from "svelte/store";
 import localeKeys from "virtual:locale-keys";
 import * as PlatformService from "../../bindings/TcNo-Acc-Switcher/internal/platform/platformservice.js";
-import { zipMessages } from "../lib/localeMessages";
+import { resolveLocale, zipMessages } from "../lib/localeMessages";
 
 const STORAGE_KEY = "language";
 
@@ -12,7 +12,8 @@ const modules = import.meta.glob("../Resources/*.json") as Record<
   () => Promise<{ default: (string | null)[] }>
 >;
 
-export const locale = writable("en-US");
+export const locale = writable("ar-SA");
+export const isRtl = derived(locale, localeIsRtl);
 const messages = writable<Record<string, string>>({});
 
 export const availableLocales = Object.keys(modules)
@@ -67,13 +68,6 @@ function localeIsRtl(code: string): boolean {
   return ["ar", "fa", "he", "ur", "yi"].includes(prim);
 }
 
-function resolveLocale(wanted: string | null) {
-  if (wanted && availableLocales.includes(wanted)) return wanted;
-  return availableLocales.includes("en-US")
-    ? "en-US"
-    : (availableLocales[0] ?? "en-US");
-}
-
 let enUSMessagesCache: Record<string, string> | null = null;
 
 async function loadEnUSMessages(): Promise<Record<string, string>> {
@@ -115,11 +109,11 @@ export async function initI18n() {
     code = null;
   }
   const saved = code ?? localStorage.getItem(STORAGE_KEY);
-  await loadLocale(resolveLocale(saved));
+  await loadLocale(resolveLocale(saved, availableLocales));
 }
 
 export async function setUserLanguage(code: string) {
-  const next = resolveLocale(code);
+  const next = resolveLocale(code, availableLocales);
   try {
     await PlatformService.SetLanguage(next);
   } catch {

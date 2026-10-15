@@ -69,13 +69,13 @@
 
   <label class="new-factor__field">
     <span>{passwordLabel || $t("SteamGuard_Factors_OptionalPassword")}</span>
-    <input class="modal-input" type="password" autocomplete="off" bind:value={password} on:keydown={onEnter} />
+    <input dir="ltr" class="modal-input" type="password" autocomplete="off" bind:value={password} on:keydown={onEnter} />
   </label>
 
   {#if wantsPassword}
     <label class="new-factor__field">
       <span>{$t("SteamGuard_Settings_ConfirmPasswordTitle")}</span>
-      <input class="modal-input" type="password" autocomplete="off" bind:value={confirmation} on:keydown={onEnter} />
+      <input dir="ltr" class="modal-input" type="password" autocomplete="off" bind:value={confirmation} on:keydown={onEnter} />
     </label>
   {/if}
 
