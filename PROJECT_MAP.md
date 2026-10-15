@@ -129,7 +129,8 @@ Preview artifacts are outside the repository under `C:/Users/PC/.codex/visualiza
 
 No known newly orphaned source remains. Keep validation items below until actual evidence resolves them.
 
-- Run the new Verify workflow after push. Full Svelte checking, Vitest, Go tests, generated bindings, and Windows executable compilation have not run locally.
+- First Verify run (`38721926769`, commit `c6cb46ea`) passed binding generation, Svelte/TypeScript checking, frontend tests, and frontend production build. Go tests stopped in existing shortcut/backup tests: runner temporary paths used `C:/Users/RUNNER~1/...`, while canonical paths use the full profile name. The workflow now sets TEMP/TMP to `runner.temp`; verify this environment correction with a fresh full run. No protection checks or failing tests were disabled.
+- Full Go-suite success and Windows executable compilation remain pending. Nothing has been installed locally.
 - Record any CI failures and distinguish pre-existing failures from redesign regressions; fix supported regressions before accepting the build.
 - Visually inspect the real Windows build: all routes, Steam games/tools, Guard enrollment/unlock/restore, error/loading/empty states, search/context menus, dialogs, drag ordering, keyboard/gamepad controls, and actual account switching.
 - Validate saved custom backgrounds and representative dark/light themes in the real application; the sample preview covers the new default palette only.
