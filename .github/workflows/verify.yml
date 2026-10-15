@@ -24,10 +24,13 @@ jobs:
     env:
       WAILS3_VERSION: v3.0.0-beta.16
       CGO_ENABLED: '0'
-      # Native path checks compare canonical paths; avoid the runner's RUNNER~1 alias.
-      TEMP: ${{ runner.temp }}
-      TMP: ${{ runner.temp }}
     steps:
+      - name: Configure canonical temporary paths
+        # Native path checks must not receive the profile's RUNNER~1 alias.
+        run: |
+          "TEMP=$env:RUNNER_TEMP" >> $env:GITHUB_ENV
+          "TMP=$env:RUNNER_TEMP" >> $env:GITHUB_ENV
+
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
