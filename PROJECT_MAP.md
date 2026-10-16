@@ -1,5 +1,13 @@
 # Switcher — Interface Redesign
 
+## [FORK_RELEASES]
+
+- Every successful push to `master` in `2-sa/Switcher` builds and publishes a Windows x64 release through `verify.yml`. Versions use `4.1.<workflow run number>`; re-running a workflow retains its version. Master commits have independent concurrency groups so a later push does not cancel an earlier release build.
+- The version is embedded before building. Go/frontend tests, the Windows build, Ed25519 signature verification against `updater-key.pub`, and SHA-256 checksum verification must succeed before publication. Files are uploaded to a draft before it is published; reruns preserve an already-published release.
+- `FORK_UPDATER_KEY` is stored only as a repository Actions secret. The repository contains its public key and a signing test fixture. The upstream SignPath workflow remains separate; fork executables have updater signatures but no Windows Authenticode certificate.
+- Existing builds with the upstream public key need one manual download of the first fork-signed release; subsequent fork-signed builds can update through the application.
+- Pending: verify the first automatic release workflow and published executable/signature/checksum assets.
+
 Status: redesign and Windows CI verified; native visual/interaction acceptance is pending.
 Reviewed: 2026-10-15. Shell date check returned `2026-10`.
 

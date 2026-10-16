@@ -4,7 +4,8 @@ param(
   [string]$Step,
 
   [string]$SignedExePath,
-  [string]$SignedInstallerPath
+  [string]$SignedInstallerPath,
+  [string]$ReleaseTag
 )
 
 $ErrorActionPreference = 'Stop'
@@ -26,6 +27,9 @@ function Add-CiEnv {
 }
 
 function Get-ReleaseTag {
+  if ($ReleaseTag) {
+    return $ReleaseTag
+  }
   if ($env:GITHUB_REF_NAME) {
     return $env:GITHUB_REF_NAME
   }

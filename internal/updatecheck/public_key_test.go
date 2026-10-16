@@ -74,17 +74,14 @@ func TestEmbeddedUpdaterKeyNormalizes(t *testing.T) {
 	}
 }
 
-// Known-answer vector: sha256 of the published v4.0.6 TcNo-Acc-Switcher.exe
-// and its .exe.sig release asset. Proves updater-key.pub matches the CI
-// signing secret (UPDATER_KEY), not just that it parses — if this fails
-// after a deliberate key rotation, re-pin the vector from the first release
-// signed with the new key.
-func TestEmbeddedUpdaterKeyMatchesReleaseSignature(t *testing.T) {
-	digest, err := hex.DecodeString("d3a4d5e063e4ecff7d76938fc7a0a4794802492cdec1b7c6a0f236b6e35f1d73")
+// Signing fixture pinned when the fork key was created. Release CI additionally
+// verifies each executable against the same embedded public key before publishing.
+func TestEmbeddedUpdaterKeyMatchesSigningFixture(t *testing.T) {
+	digest, err := hex.DecodeString("a4f176b2add5afdb3907510b48c98f6b328e5a2b365306e32adbdddbbc114d35")
 	if err != nil {
 		t.Fatal(err)
 	}
-	sig, err := base64.StdEncoding.DecodeString("/tEpODL7wUgSuJXhkPewe6FVOwgH21lneAvn4V7nbdL41/tFYDD6Ce2nNv0ZTyjFn74OdTcSF58Rm5dKcXpiCA==")
+	sig, err := base64.StdEncoding.DecodeString("sWz8GCnDwrUuf/c7puXMHs0RfLxjV9plsDrQaisKLyY1LYG27BEF1luyc3V8OF6irDzDQzKmInOk7u6c+IDbDQ==")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +91,7 @@ func TestEmbeddedUpdaterKeyMatchesReleaseSignature(t *testing.T) {
 		t.Fatalf("normalized key is %d bytes, want %d", len(key), ed25519.PublicKeySize)
 	}
 	if !ed25519.Verify(ed25519.PublicKey(key), digest, sig) {
-		t.Fatal("v4.0.6 release signature does not verify against updater-key.pub; released updates will fail to install")
+		t.Fatal("fork signing fixture does not verify against updater-key.pub; released updates will fail to install")
 	}
 }
 
