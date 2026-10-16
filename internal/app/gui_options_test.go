@@ -6,6 +6,7 @@ import (
 	"TcNo-Acc-Switcher/internal/buildmode"
 	"TcNo-Acc-Switcher/internal/cli"
 	"TcNo-Acc-Switcher/internal/platform"
+	"TcNo-Acc-Switcher/internal/updatecheck"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -79,6 +80,9 @@ func TestMainWindowOptionsPreserveStartupPlacement(t *testing.T) {
 
 func TestGitHubUpdaterConfigUsesPrereleasePreference(t *testing.T) {
 	stable := githubUpdaterConfig(platform.AppSettings{})
+	if stable.Repository != updatecheck.GitHubRepository {
+		t.Fatalf("Repository = %q, want %q", stable.Repository, updatecheck.GitHubRepository)
+	}
 	if stable.Prerelease {
 		t.Fatal("Prerelease = true, want false for an explicit opt-out")
 	}

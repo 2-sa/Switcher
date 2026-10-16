@@ -6,24 +6,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 
 	"TcNo-Acc-Switcher/internal/api"
 	"TcNo-Acc-Switcher/internal/appclient"
 )
 
-// platformsJSONRawBase is where the catalogs live in the repository.
-// TODO: switch refs/heads/go to refs/heads/main when the go branch is merged to main.
-const platformsJSONRawBase = "https://raw.githubusercontent.com/TCNOco/TcNo-Acc-Switcher/refs/heads/go/"
-
 // PlatformsJSONRawURL is the remote copy of one catalog file. The caller names
 // it: the catalogs are per-OS and only the platform package knows which.
 func PlatformsJSONRawURL(fileName string) string {
-	fileName = strings.TrimSpace(fileName)
-	if fileName == "" {
-		fileName = "Platforms.json"
-	}
-	return platformsJSONRawBase + fileName
+	return platformsJSONRawURL(fileName)
 }
 
 const maxPlatformsJSONBytes = 4 << 20

@@ -40,7 +40,7 @@ func emitAppUpdateAvailable(message string) {
 	if app == nil {
 		return
 	}
-	const downloadURL = "https://github.com/TCNOco/TcNo-Acc-Switcher/releases/latest"
+	downloadURL := updatecheck.LatestReleaseURL()
 	_ = app.Event.Emit(AppUpdateAvailableEvent, UpdateAvailablePayload{
 		Message:     message,
 		DownloadURL: downloadURL,
@@ -304,7 +304,7 @@ func runAPIUpdateCheck(ctx context.Context) string {
 }
 
 // CheckForUpdatesManually checks for updates when triggered from the UI.
-// Uses the Wails signed GitHub updater first; falls back to the tcno.co API.
+// Uses the Wails signed GitHub updater first; falls back to the fork release API.
 // Returns "available", "up-to-date", "offline", or "failed".
 func (*PlatformService) CheckForUpdatesManually() string {
 	exeDir, err := ResolveExeDir()

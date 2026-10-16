@@ -2,6 +2,7 @@ package updatecheck
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -51,13 +52,17 @@ func IsUpToDate(current, latest string) bool {
 }
 
 func FetchLatestVersion(ctx context.Context, client *http.Client, currentVersion string) (version string, message string, err error) {
+	return fetchLatestVersion(ctx, client, currentVersion, updateAPIURL(currentVersion))
+}
+
+func fetchLatestVersion(ctx context.Context, client *http.Client, currentVersion, url string) (version string, message string, err error) {
 	if appclient.IsOfflineMode() {
 		return "", "", appclient.ErrOfflineMode
 	}
 	if client == nil {
 		client = appclient.Shared
 	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, updateAPIURL(currentVersion), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return "", "", err
 	}
@@ -67,23 +72,33 @@ func FetchLatestVersion(ctx context.Context, client *http.Client, currentVersion
 		return "", "", err
 	}
 	defer resp.Body.Close()
-	body, err := io.ReadAll(io.LimitReader(resp.Body, 4096))
+	body, err := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
 	if err != nil {
 		return "", "", err
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return "", "", fmt.Errorf("updatecheck: HTTP %d", resp.StatusCode)
 	}
-	lines := strings.SplitN(strings.TrimSpace(string(body)), "\n", 2)
-	version = strings.TrimSpace(lines[0])
-	if len(lines) > 1 {
-		message = strings.TrimSpace(lines[1])
+	var release struct {
+		TagName string `json:"tag_name"`
+		Name    string `json:"name"`
+		Body    string `json:"body"`
+	}
+	if err := json.Unmarshal(body, &release); err != nil {
+		return "", "", fmt.Errorf("updatecheck: invalid GitHub release response: %w", err)
+	}
+	version = strings.TrimSpace(release.TagName)
+	if version == "" {
+		return "", "", fmt.Errorf("updatecheck: GitHub release is missing tag_name")
+	}
+	message = strings.TrimSpace(release.Body)
+	if message == "" {
+		message = strings.TrimSpace(release.Name)
 	}
 	return version, message, nil
 }
 
-// FetchLaunchAPICheck hits the tcno.co API endpoint used for launch telemetry
-// and update fallback data.
+// FetchLaunchAPICheck queries the fork's latest release for launch update fallback data.
 func FetchLaunchAPICheck(ctx context.Context, currentVersion string) LaunchAPICheckResult {
 	if appclient.IsOfflineMode() {
 		return LaunchAPICheckResult{Err: appclient.ErrOfflineMode}
@@ -124,7 +139,7 @@ func HandleLaunchAPICheckResult(result LaunchAPICheckResult, exeDir string, curr
 	}
 }
 
-// RunLaunchAPICheck runs the tcno.co API check used as an updater fallback on launch.
+// RunLaunchAPICheck runs the GitHub release fallback used on launch.
 func RunLaunchAPICheck(ctx context.Context, exeDir string, currentVersion string, onUpdateAvailable func(message string), onCheckFailed func()) {
 	HandleLaunchAPICheckResult(FetchLaunchAPICheck(ctx, currentVersion), exeDir, currentVersion, onUpdateAvailable, onCheckFailed)
 }
