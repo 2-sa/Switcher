@@ -11,6 +11,7 @@
   import { installInputModalityTracking } from "./lib/inputModality";
   import { animationsEnabled, loadAnimationsEnabled } from "./stores/animationSettings";
   import TitleBar from './components/TitleBar.svelte'
+  import PageBackButton from "./components/PageBackButton.svelte";
   import UpdateBar from './components/UpdateBar.svelte'
   import AppModal from './components/AppModal.svelte'
   import Toast from './components/Toast.svelte'
@@ -553,9 +554,12 @@
     <div class="page-content-wrapper">
       {#if $route.page === "home" || $route.page === "platform"}
         <header class="workspace-heading">
-          <div>
+          <div class="workspace-heading__title">
+            <PageBackButton />
+            <div>
             <h1>{#if $route.page === "home"}{$t("Shell_Platforms")}{:else}<bdi>{$route.platformName}</bdi>{/if}</h1>
             <p>{$t($route.page === "home" ? "Shell_PlatformsHint" : $route.platformName === "Steam" && $steamPageTab === "games" ? "Shell_GamesHint" : "Shell_AccountsHint")}</p>
+            </div>
           </div>
           <div class="workspace-heading__actions">
             <button class="workspace-search" type="button" on:click={() => { if ($route.page === "platform" && $route.platformName === "Steam" && $steamPageTab === "games") focusSteamGamesSearch(); else openSearchOverlay(); }}>
@@ -570,6 +574,10 @@
           {/if}
           </div>
         </header>
+      {:else if $route.page !== "steam-confirmations"}
+        <nav class="workspace-navigation" aria-label={$t("Aria_WindowBack")}>
+          <PageBackButton />
+        </nav>
       {/if}
       <div class="page-stage">
       {#key $route.page + ("platformName" in $route ? $route.platformName : "")}

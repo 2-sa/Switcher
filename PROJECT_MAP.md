@@ -5,11 +5,19 @@ Reviewed: 2026-10-16.
 
 ## [PRIVACY]
 
+- Branch verification: [run 38843086002](https://github.com/2-sa/Switcher/actions/runs/38843086002) passed on `996c6cfde4fb02ca90b91b1dbc0d3a7235c00e71`: Svelte/TypeScript, frontend tests/build, Go tests (including privacy regressions), and Windows build. Publication was intentionally skipped on the test branch.
+
 - Removed statistics, crash, stability-rating, and feedback uploads to the original developer. Native compatibility methods cannot send data; reporting settings are forced off on load/save/batch updates, including legacy settings migration. Crash dumps remain local and are no longer associated with a statistics UUID.
 - Local usage statistics default to off. Existing explicit local collection preferences remain supported. Sharing/automatic crash upload controls and the crash submission prompt were removed. Feedback opens the fork's GitHub issues page without prefilled account data, identifiers, or logs.
 - Shared HTTP transport rejects `tcno.co` and its subdomains, including redirected requests and old/custom GameStats catalogs. Upstream-only Apex/CS fallback proxies, Steam catalog mirrors, and dynamic translator lists are consequently unavailable; cached data and independent platform sources remain usable. Intentional author/credit links in the external browser are unchanged.
 - `steamguard.tcno.co` remains the existing local WebAuthn relying-party identifier; it is not an HTTP data upload destination. Changing it would invalidate existing hardware-key credentials.
 - Regression coverage checks blocked requests/redirects, unaffected GitHub/Steam requests, old true flags, native setters/batches, disabled feedback/statistics APIs, and retention of local crash dumps. Native runtime network capture remains unverified.
+
+## [NAVIGATION FOLLOW-UP]
+
+- Moved the application back action out of the LTR native caption into a labeled page control at inline start: right in Arabic and left in English. Home no longer displays a nonfunctional back arrow. Standalone Steam confirmations retain their dedicated layout. Modal blocking, history behavior, keyboard/controller handling, and the controller hint remain supported.
+- The sidebar is the sole global settings/platform-management entry point. The account footer retains a visibly named platform-specific settings action, such as `Steam settings`, instead of another generic gear.
+- A browser layout preview using the changed styles confirmed RTL back placement to the right of the title, LTR placement to its left, no horizontal overflow at the inspected desktop size, no home back action, and one global settings/manage entry each. This is a layout preview with sample markup, not a rendered Wails application; native visual acceptance remains pending.
 
 ## [FORK_RELEASES]
 

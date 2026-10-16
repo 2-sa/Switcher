@@ -147,6 +147,19 @@ button.sidebar__link {
   }
 }
 
+.workspace-heading__title {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+  gap: 12px;
+}
+
+.workspace-navigation {
+  display: flex;
+  flex: 0 0 auto;
+  padding: 16px 24px 8px;
+}
+
 .workspace-tabs {
   display: flex;
   flex-shrink: 0;
