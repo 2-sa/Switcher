@@ -1,15 +1,15 @@
 # Switcher — Interface Redesign
 
+Status: redesign, Windows CI, and fork release publication verified; native visual/interaction and installed updater acceptance are pending.
+Reviewed: 2026-10-16.
+
 ## [FORK_RELEASES]
 
 - Every successful push to `master` in `2-sa/Switcher` builds and publishes a Windows x64 release through `verify.yml`. Versions use `4.1.<workflow run number>`; re-running a workflow retains its version. Master commits have independent concurrency groups so a later push does not cancel an earlier release build.
 - The version is embedded before building. Go/frontend tests, the Windows build, Ed25519 signature verification against `updater-key.pub`, and SHA-256 checksum verification must succeed before publication. Files are uploaded to a draft before it is published; reruns preserve an already-published release.
 - `FORK_UPDATER_KEY` is stored only as a repository Actions secret. The repository contains its public key and a signing test fixture. The upstream SignPath workflow remains separate; fork executables have updater signatures but no Windows Authenticode certificate.
 - Existing builds with the upstream public key need one manual download of the first fork-signed release; subsequent fork-signed builds can update through the application.
-- Pending: verify the first automatic release workflow and published executable/signature/checksum assets.
-
-Status: redesign and Windows CI verified; native visual/interaction acceptance is pending.
-Reviewed: 2026-10-15. Shell date check returned `2026-10`.
+- Verified first automatic publication: [run 38840878349](https://github.com/2-sa/Switcher/actions/runs/38840878349) passed on `6da32dd758bde5143cb2e0dd194a953426675e67` and published non-draft [v4.1.8](https://github.com/2-sa/Switcher/releases/tag/v4.1.8). The executable, detached signature, and SHA256SUMS are present. Version preparation was also exercised in an isolated temporary directory (app `4.1.123`, Windows `4.1.123.0`), and the pinned fork signing fixture verified locally using Node crypto.
 
 ## [SCOPE & ASSUMPTIONS]
 
@@ -157,7 +157,7 @@ User feedback after commit 944bf850: the interface still contains widespread LTR
 
 ## [ORPHANS & PENDING]
 
-No known newly orphaned source remains. Current repair: GitHub checks/build and visual retest of the repaired executable are pending. Keep validation items below until actual evidence resolves them.
+No known newly orphaned source remains. GitHub checks, build, signing verification, and release publication passed in run `38840878349`. A visual retest of the repaired executable and an installed update/download/restart flow remain pending; CI and publication do not establish those runtime results.
 
 - Resolved CI failures: first run `38721926769` used `C:/Users/RUNNER~1/...` temporary paths, causing existing shortcut/backup path comparisons to fail. Initial correction `44adb716` used a runner context at unsupported job-env scope; `69877c1e` instead exports TEMP/TMP from RUNNER_TEMP through GITHUB_ENV in a startup step. The complete Go suite and executable build then passed in run `38722942797`. No protection checks or failing tests were disabled.
 - Visually inspect the real Windows build: all routes, Steam games/tools, Guard enrollment/unlock/restore, error/loading/empty states, search/context menus, dialogs, drag ordering, keyboard/gamepad controls, and actual account switching.
