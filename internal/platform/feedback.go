@@ -3,11 +3,12 @@ package platform
 import (
 	"strings"
 
+	"TcNo-Acc-Switcher/internal/api"
 	"TcNo-Acc-Switcher/internal/appclient"
 	"TcNo-Acc-Switcher/internal/stability"
 )
 
-// SubmitStabilityRating records whether an account switch worked for the given platform.
+// SubmitStabilityRating refuses upstream ratings from legacy native clients.
 func (p *PlatformService) SubmitStabilityRating(platform string, working bool) error {
 	if appclient.IsOfflineMode() {
 		return appclient.ErrOfflineMode
@@ -16,11 +17,10 @@ func (p *PlatformService) SubmitStabilityRating(platform string, working bool) e
 	if platform == "" {
 		return nil
 	}
-	stability.SubmitRating(platform, working)
-	return nil
+	return api.ErrReportingDisabled
 }
 
-// SubmitFeedback sends a switch issue or feature suggestion to the API.
+// SubmitFeedback refuses upstream issue and suggestion submissions.
 // kind must be "switch_issue" or "feature_suggestion".
 func (p *PlatformService) SubmitFeedback(kind, platform, text string, attachLog bool) error {
 	if appclient.IsOfflineMode() {

@@ -117,7 +117,7 @@
   "Settings_Header_System": "System",
   "Settings_Header_Theme": "Theme",
   "Settings_Header_Program": "Program",
-  "Settings_Header_StatsSharing": "Statistics & Sharing",
+  "Settings_Header_StatsSharing": "Statistics & Privacy",
   "Settings_Header_Platform": "{platformName} settings",
   "Settings_Header_LaunchOptions": "Launch options",
   "Settings_LaunchArgumentsForPlatform": "Launch arguments for {platform}",
@@ -136,7 +136,7 @@
   "Settings_TrayMax": "Max number of accounts to remember:",
   "Settings_ExtraPlatformsDisabled": "Disabled platforms. Click to enable them.",
   "Settings_ExtraPlatformsEnabled": "Visible platforms. Click to disable them.",
-  "Settings_CollectStats": "Collect statistics",
+  "Settings_CollectStats": "Keep usage statistics on this device",
   "Settings_CrashReportAutoSubmit": "Auto-Submit crash log reports",
   "Settings_ShareStats": "Share stats anonymously (recommended)",
   "Settings_DiscordRpc": "Discord Rich Presence (RPC)",
@@ -1185,5 +1185,8 @@
   "ServerPicker_EnableAll": "Enable All",
   "ServerPicker_LoadFailed": "Could not load the server list",
   "ServerPicker_PingFailed": "Could not ping the servers",
-  "ServerPicker_ApplyFailed": "Could not change the server"
+  "ServerPicker_ApplyFailed": "Could not change the server",
+  "Settings_LocalStatsOnly": "Local statistics are optional. This fork does not send usage statistics or crash logs to the original developer.",
+  "Feedback_ForkPrivacy": "Open the fork’s GitHub issues page to report a problem or suggest a change. The application will not attach account data or logs automatically.",
+  "Feedback_OpenFork": "Open issue tracker"
 }

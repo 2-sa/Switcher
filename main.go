@@ -64,8 +64,6 @@ var (
 	securitySvc     = security.NewService()
 	serverPickerSvc = serverpicker.NewService()
 	discordRPC      = discordrpc.NewManager()
-
-	crashSubmitted bool
 )
 
 func init() {
@@ -170,9 +168,6 @@ func main() {
 	syncOfflineModeFromSettings(startupSettings)
 	stats.SetStatsCollectionEnabled(startupSettings.StatsEnabled)
 
-	if crashlog.HasPending() && !startupSettings.OfflineMode && startupSettings.CrashReportAutoSubmit {
-		crashSubmitted = crashlog.SubmitPending()
-	}
 	defer crashlog.CaptureFatal()
 
 	if parsed.Kind == cli.KindHelp || parsed.Help {
@@ -281,7 +276,7 @@ func main() {
 		DiscordRPC:       discordRPC,
 		ControllerInput:  controllerSvc,
 		LogWriter:        app.LogWriter(logSink),
-		CrashSubmitted:   crashSubmitted,
+		CrashSubmitted:   false,
 		StartupToast:     parsed.StartupToast,
 		EmbeddedAssets:   frontendAssets,
 		TrayIconPNG:      trayIconPNG,

@@ -205,12 +205,6 @@
     get(t)("Settings_CollectStats"),
   );
 
-  const crashReportAutoSubmit = createToggle(
-    () => PlatformService.GetCrashReportAutoSubmit(),
-    (v) => PlatformService.SetCrashReportAutoSubmit(v),
-    get(t)("Settings_CrashReportAutoSubmit"),
-    () => !get(offlineMode),
-  );
 
   const protocol = createToggle(
     () => PlatformService.GetProtocolEnabled(),
@@ -297,12 +291,6 @@
     }
   };
 
-  const statsShare = createToggle(
-    () => PlatformService.GetStatsShare(),
-    (v) => PlatformService.SetStatsShare(v),
-    get(t)("Settings_ShareStats"),
-    () => get(statsEnabled.value),
-  );
 
   const prereleaseUpdates = createToggle(
     () => PlatformService.GetPrereleaseUpdates(),
@@ -324,9 +312,7 @@
     protocol.value.set(settings.protocolEnabled);
     exitToTray.value.set(settings.exitToTray);
     statsEnabled.value.set(settings.statsEnabled);
-    statsShare.value.set(settings.statsShare);
     prereleaseUpdates.value.set(settings.prereleaseUpdates);
-    crashReportAutoSubmit.value.set(settings.crashReportAutoSubmit);
     discordRpc.value.set(settings.discordRpc);
     discordRpcShare.value.set(settings.discordRpcShare);
     minimizeOnSwitch.value.set(settings.minimizeOnSwitch);
@@ -346,9 +332,7 @@
     void protocol.init();
     void exitToTray.init();
     void statsEnabled.init();
-    void statsShare.init();
     void prereleaseUpdates.init();
-    void crashReportAutoSubmit.init();
     void discordRpc.init();
     void discordRpcShare.init();
     void minimizeOnSwitch.init();
@@ -813,6 +797,7 @@
 </SettingsGroup>
 
 <SettingsGroup title={$t("Settings_Header_StatsSharing")}>
+  <p class="settings-note">{$t("Settings_LocalStatsOnly")}</p>
   <div class="settings-grid">
     <div class="settings-stack">
       <SettingsToggle
@@ -822,15 +807,6 @@
         label={$t("Settings_CollectStats")}
         on:change={() => void statsEnabled.toggle()}
       />
-      <div class="settings-sub">
-        <SettingsToggle
-          id="gs-stats-share"
-          checked={$statsShare.value}
-          disabled={$statsShare.loading || !$statsEnabled.value}
-          label={$t("Settings_ShareStats")}
-          on:change={() => void statsShare.toggle()}
-        />
-      </div>
     </div>
 
     <div class="settings-stack">
@@ -851,14 +827,6 @@
         />
       </div>
     </div>
-
-    <SettingsToggle
-      id="gs-crash-report-auto-submit"
-      checked={$crashReportAutoSubmit.value}
-      disabled={$crashReportAutoSubmit.loading || $offlineMode}
-      label={$t("Settings_CrashReportAutoSubmit")}
-      on:change={() => void crashReportAutoSubmit.toggle()}
-    />
   </div>
 
   <div class="settings-actions">

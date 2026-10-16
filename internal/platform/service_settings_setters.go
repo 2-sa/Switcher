@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"TcNo-Acc-Switcher/internal/api"
 	"TcNo-Acc-Switcher/internal/appclient"
 	"TcNo-Acc-Switcher/internal/screenprivacy"
 	"TcNo-Acc-Switcher/internal/stats"
@@ -211,6 +212,9 @@ func (p *PlatformService) SetStatsEnabled(enabled bool) error {
 }
 
 func (p *PlatformService) SetStatsShare(enabled bool) error {
+	if enabled {
+		return api.ErrReportingDisabled
+	}
 	return p.withSettingsWrite(func(s *AppSettings) error {
 		s.StatsShare = enabled
 		return nil

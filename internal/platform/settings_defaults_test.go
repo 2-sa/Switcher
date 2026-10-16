@@ -14,10 +14,7 @@ var defaultOnFields = []struct {
 	get  func(AppSettings) bool
 	set  func(*AppSettings, bool)
 }{
-	{"statsEnabled", func(s AppSettings) bool { return s.StatsEnabled }, func(s *AppSettings, v bool) { s.StatsEnabled = v }},
-	{"statsShare", func(s AppSettings) bool { return s.StatsShare }, func(s *AppSettings, v bool) { s.StatsShare = v }},
 	{"prereleaseUpdates", func(s AppSettings) bool { return s.PrereleaseUpdates }, func(s *AppSettings, v bool) { s.PrereleaseUpdates = v }},
-	{"crashReportAutoSubmit", func(s AppSettings) bool { return s.CrashReportAutoSubmit }, func(s *AppSettings, v bool) { s.CrashReportAutoSubmit = v }},
 	{"discordRpc", func(s AppSettings) bool { return s.DiscordRpc }, func(s *AppSettings, v bool) { s.DiscordRpc = v }},
 	{"animationsEnabled", func(s AppSettings) bool { return s.AnimationsEnabled }, func(s *AppSettings, v bool) { s.AnimationsEnabled = v }},
 	{"controllerSupportEnabled", func(s AppSettings) bool { return s.ControllerSupportEnabled }, func(s *AppSettings, v bool) { s.ControllerSupportEnabled = v }},

@@ -4,12 +4,17 @@ package appclient
 import (
 	"errors"
 	"net/http"
+	"strings"
 	"sync/atomic"
 	"time"
 )
 
 // ErrOfflineMode is returned by Shared when offline mode is enabled.
 var ErrOfflineMode = errors.New("offline mode: outbound HTTP disabled")
+
+// ErrOriginalDeveloperService prevents legacy catalogs and redirects from
+// disclosing identifiers or diagnostics to the upstream developer's services.
+var ErrOriginalDeveloperService = errors.New("upstream developer services are disabled in this fork")
 
 var offline atomic.Bool
 
@@ -30,6 +35,10 @@ type offlineRoundTripper struct {
 func (t offlineRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	if offline.Load() {
 		return nil, ErrOfflineMode
+	}
+	host := strings.TrimSuffix(strings.ToLower(req.URL.Hostname()), ".")
+	if host == "tcno.co" || strings.HasSuffix(host, ".tcno.co") {
+		return nil, ErrOriginalDeveloperService
 	}
 	if t.base == nil {
 		t.base = http.DefaultTransport

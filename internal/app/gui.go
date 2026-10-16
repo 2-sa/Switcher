@@ -164,7 +164,6 @@ func RunGUI(params RunGUIParams) {
 	if err := stats.IncrementLaunchCount(); err != nil {
 		log.Printf("stats launch count: %v", err)
 	}
-	go stats.MustTryUploadDaily(guiSettings.StatsEnabled, guiSettings.StatsShare, guiSettings.OfflineMode)
 	params.DiscordRPC.Start()
 	// Before the window exists, so a broadcaster that is already running has been
 	// adopted by the time the first account list paints.

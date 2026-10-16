@@ -34,7 +34,6 @@
   import { pushToast } from "./stores/toast";
   import { formatToastWithError } from "./lib/formatWailsError";
   import { registerSvgRenderBridge } from "./lib/svgRenderBridge";
-  import { runCrashReportPromptIfNeeded } from "./lib/crashReportPrompt";
   import { runLegacyInstallPromptIfNeeded } from "./lib/legacyInstallPrompt";
   import { activeModal, openConfirm } from "./stores/modal";
   import { contextMenu } from "./stores/contextMenu";
@@ -414,10 +413,7 @@
       applyNavigateJSON(raw);
     });
     void NotifyLaunchUpdateCheck();
-    // Sequenced, not parallel: both open a modal and the store holds one at a time.
-    void runCrashReportPromptIfNeeded()
-      .catch(() => {})
-      .then(() => runLegacyInstallPromptIfNeeded())
+    void runLegacyInstallPromptIfNeeded()
       .catch(() => {});
 
     const schedulePrefetch = (): void => {

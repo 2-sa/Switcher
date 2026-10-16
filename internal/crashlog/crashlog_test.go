@@ -1,10 +1,36 @@
 package crashlog
 
 import (
+	"bytes"
 	"os"
 	"testing"
 	"time"
 )
+
+func TestDisabledSubmissionPreservesLocalCrashDump(t *testing.T) {
+	dir := t.TempDir()
+	previous := crashDumpDirResolver
+	crashDumpDirResolver = func() (string, error) { return dir, nil }
+	t.Cleanup(func() { crashDumpDirResolver = previous })
+	if err := writeCrashDump(CrashDump{Error: "local diagnostic"}); err != nil {
+		t.Fatal(err)
+	}
+	path, err := crashDumpPath()
+	if err != nil {
+		t.Fatal(err)
+	}
+	before, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if SubmitPending() {
+		t.Fatal("crash report was submitted")
+	}
+	after, err := os.ReadFile(path)
+	if err != nil || !bytes.Equal(before, after) {
+		t.Fatalf("local diagnostic was removed or changed: %v", err)
+	}
+}
 
 func TestCapture_DoesNotExit(t *testing.T) {
 	dir := t.TempDir()

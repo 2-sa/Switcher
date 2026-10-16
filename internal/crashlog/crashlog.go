@@ -1,11 +1,9 @@
 package crashlog
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -13,12 +11,9 @@ import (
 	"time"
 
 	buildinfo "TcNo-Acc-Switcher/build"
-	"TcNo-Acc-Switcher/internal/api"
-	"TcNo-Acc-Switcher/internal/appclient"
 	"TcNo-Acc-Switcher/internal/fsutil"
 	"TcNo-Acc-Switcher/internal/logredact"
 	"TcNo-Acc-Switcher/internal/logsanitize"
-	"TcNo-Acc-Switcher/internal/paths"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -58,24 +53,6 @@ func crashDumpPath() (string, error) {
 		return "", err
 	}
 	return filepath.Join(dir, crashDumpFile), nil
-}
-
-func readStatsUUID() string {
-	root, err := paths.DataRoot()
-	if err != nil {
-		return ""
-	}
-	data, err := os.ReadFile(filepath.Join(root, "Statistics.json"))
-	if err != nil {
-		return ""
-	}
-	var aux struct {
-		Uuid string `json:"Uuid"`
-	}
-	if err := json.Unmarshal(data, &aux); err != nil {
-		return ""
-	}
-	return aux.Uuid
 }
 
 func writeCrashDump(dump CrashDump) error {
@@ -139,7 +116,6 @@ func captureAndWrite(r any) string {
 		OS:        runtime.GOOS + "/" + runtime.GOARCH,
 		OSInfo:    osDisplayString(),
 		Timestamp: time.Now().UTC().Format(time.RFC3339),
-		UUID:      readStatsUUID(),
 		Log:       logsanitize.ActionLogForUpload(),
 	}
 
@@ -172,65 +148,7 @@ func DiscardPending() error {
 	return err
 }
 
-// SubmitPending checks for a crash dump from a previous run and submits it.
-// Returns true if a crash dump was found and successfully submitted.
+// SubmitPending is retained for native API compatibility. Crash dumps stay local.
 func SubmitPending() bool {
-	if appclient.IsOfflineMode() {
-		return false
-	}
-
-	path, err := crashDumpPath()
-	if err != nil {
-		slog.Warn("crashlog: resolving dump path", "err", err)
-		return false
-	}
-
-	data, err := os.ReadFile(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return false
-		}
-		slog.Warn("crashlog: reading pending dump", "err", err)
-		return false
-	}
-	var dump CrashDump
-	if err := json.Unmarshal(data, &dump); err != nil {
-		slog.Warn("crashlog: invalid pending dump")
-		return false
-	}
-	dump.Stack = logredact.RedactText(dump.Stack)
-	dump.Error = logredact.RedactText(dump.Error)
-	dump.OSInfo = logredact.RedactText(dump.OSInfo)
-	dump.Log = logredact.RedactText(dump.Log)
-	data, err = json.Marshal(dump)
-	if err != nil {
-		slog.Warn("crashlog: sanitizing pending dump")
-		return false
-	}
-
-	req, err := http.NewRequest(http.MethodPost, api.CrashURL(), bytes.NewReader(data))
-	if err != nil {
-		slog.Warn("crashlog: building submit request", "err", err)
-		return false
-	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", api.UserAgent(buildinfo.Version()))
-
-	resp, err := appclient.Shared.Do(req)
-	if err != nil {
-		slog.Warn("crashlog: submitting dump", "err", err)
-		return false
-	}
-	resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		slog.Warn("crashlog: submission rejected", "status", resp.StatusCode)
-		return false
-	}
-
-	if err := os.Remove(path); err != nil {
-		slog.Warn("crashlog: removing submitted dump", "err", err)
-	}
-
-	return true
+	return false
 }

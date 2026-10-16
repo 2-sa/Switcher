@@ -21,7 +21,7 @@ func SetStatsCollectionEnabled(enabled bool) {
 	collectionReady.Store(true)
 }
 
-// collectionEnabled mirrors AppSettings.StatsEnabled (default true when unset).
+// collectionEnabled mirrors AppSettings.StatsEnabled (default false when unset).
 func collectionEnabled() bool {
 	if collectionReady.Load() {
 		return collectionCached.Load()
@@ -35,30 +35,30 @@ func collectionEnabled() bool {
 func readCollectionEnabled() bool {
 	dir, err := resolveExeDir()
 	if err != nil {
-		return true
+		return false
 	}
 	path, ok := settingsfile.Discover(dir)
 	if !ok {
-		return true
+		return false
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return true
+			return false
 		}
-		return true
+		return false
 	}
 	var raw map[string]json.RawMessage
 	if err := json.Unmarshal(data, &raw); err != nil {
-		return true
+		return false
 	}
 	v, ok := raw["statsEnabled"]
 	if !ok {
-		return true
+		return false
 	}
 	var b bool
 	if err := json.Unmarshal(v, &b); err != nil {
-		return true
+		return false
 	}
 	return b
 }

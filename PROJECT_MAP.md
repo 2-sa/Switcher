@@ -3,6 +3,14 @@
 Status: redesign, Windows CI, and fork release publication verified; native visual/interaction and installed updater acceptance are pending.
 Reviewed: 2026-10-16.
 
+## [PRIVACY]
+
+- Removed statistics, crash, stability-rating, and feedback uploads to the original developer. Native compatibility methods cannot send data; reporting settings are forced off on load/save/batch updates, including legacy settings migration. Crash dumps remain local and are no longer associated with a statistics UUID.
+- Local usage statistics default to off. Existing explicit local collection preferences remain supported. Sharing/automatic crash upload controls and the crash submission prompt were removed. Feedback opens the fork's GitHub issues page without prefilled account data, identifiers, or logs.
+- Shared HTTP transport rejects `tcno.co` and its subdomains, including redirected requests and old/custom GameStats catalogs. Upstream-only Apex/CS fallback proxies, Steam catalog mirrors, and dynamic translator lists are consequently unavailable; cached data and independent platform sources remain usable. Intentional author/credit links in the external browser are unchanged.
+- `steamguard.tcno.co` remains the existing local WebAuthn relying-party identifier; it is not an HTTP data upload destination. Changing it would invalidate existing hardware-key credentials.
+- Regression coverage checks blocked requests/redirects, unaffected GitHub/Steam requests, old true flags, native setters/batches, disabled feedback/statistics APIs, and retention of local crash dumps. Native runtime network capture remains unverified.
+
 ## [FORK_RELEASES]
 
 - Every successful push to `master` in `2-sa/Switcher` builds and publishes a Windows x64 release through `verify.yml`. Versions use `4.1.<workflow run number>`; re-running a workflow retains its version. Master commits have independent concurrency groups so a later push does not cancel an earlier release build.

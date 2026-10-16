@@ -53,6 +53,7 @@ func migrateLegacyWindowSettings(exeDir string) (AppSettings, string, bool, erro
 			return AppSettings{}, "", false, err
 		}
 
+		normalizeAppSettingsShape(&settings)
 		path, err := resolveSettingsSavePath(exeDir, settings)
 		if err != nil {
 			return AppSettings{}, "", false, err

@@ -111,15 +111,15 @@ type AppSettings struct {
 	// long as it is on, the way the Steam Guard windows always are.
 	HideFromScreenshots bool `json:"hideFromScreenshots,omitempty"`
 
-	// StatsEnabled toggles local anonymous statistics collection.
+	// StatsEnabled toggles optional local usage statistics collection.
 	// Stored without omitempty so an explicit opt-out survives a restart.
 	StatsEnabled bool `json:"statsEnabled"`
 
-	// StatsShare toggles anonymous statistics submission.
+	// StatsShare is a legacy field, forced off in this fork.
 	// Stored without omitempty so an explicit opt-out survives a restart.
 	StatsShare bool `json:"statsShare"`
 
-	// CrashReportAutoSubmit uploads pending crash dumps on launch without prompting.
+	// CrashReportAutoSubmit is a legacy field, forced off in this fork.
 	// Stored without omitempty so false round-trips: omitted key plus normalize defaults would otherwise force true on load.
 	CrashReportAutoSubmit bool `json:"crashReportAutoSubmit"`
 
@@ -184,10 +184,10 @@ func defaultSettings() AppSettings {
 		PlatformExePaths:         map[string]string{},
 		PlatformOrder:            nil,
 		DisabledPlatforms:        nil,
-		StatsEnabled:             true,
-		StatsShare:               true,
+		StatsEnabled:             false,
+		StatsShare:               false,
 		PrereleaseUpdates:        defaultPrereleaseUpdates,
-		CrashReportAutoSubmit:    true,
+		CrashReportAutoSubmit:    false,
 		DiscordRpc:               true,
 		DiscordRpcShare:          false,
 		AnimationsEnabled:        true,
@@ -207,6 +207,9 @@ func normalizeAppSettingsShape(s *AppSettings) {
 	if s == nil {
 		return
 	}
+	// Old files and native API callers cannot re-enable upstream reporting.
+	s.StatsShare = false
+	s.CrashReportAutoSubmit = false
 	if s.Version == 0 {
 		s.Version = 1
 	}
@@ -245,16 +248,16 @@ func normalizeAppSettingsDefaults(s *AppSettings, raw map[string]json.RawMessage
 		return
 	}
 	if _, ok := raw["statsEnabled"]; !ok {
-		s.StatsEnabled = true
+		s.StatsEnabled = false
 	}
 	if _, ok := raw["statsShare"]; !ok {
-		s.StatsShare = true
+		s.StatsShare = false
 	}
 	if _, ok := raw["prereleaseUpdates"]; !ok {
 		s.PrereleaseUpdates = defaultPrereleaseUpdates
 	}
 	if _, ok := raw["crashReportAutoSubmit"]; !ok {
-		s.CrashReportAutoSubmit = true
+		s.CrashReportAutoSubmit = false
 	}
 	if _, ok := raw["discordRpc"]; !ok {
 		s.DiscordRpc = true

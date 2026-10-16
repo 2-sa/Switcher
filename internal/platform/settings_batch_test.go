@@ -69,13 +69,13 @@ func TestApplySettingsBatchUpdateStatsEffect(t *testing.T) {
 	}
 }
 
-func TestCrashReportAutoSubmitDefaultsOnWhenMissing(t *testing.T) {
+func TestCrashReportAutoSubmitDefaultsOffWhenMissing(t *testing.T) {
 	settings := AppSettings{}
 
 	normalizeAppSettingsDefaults(&settings, map[string]json.RawMessage{})
 
-	if !settings.CrashReportAutoSubmit {
-		t.Fatal("CrashReportAutoSubmit should default to true when the key is absent")
+	if settings.CrashReportAutoSubmit {
+		t.Fatal("CrashReportAutoSubmit must remain disabled")
 	}
 }
 

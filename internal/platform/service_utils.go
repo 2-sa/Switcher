@@ -23,25 +23,11 @@ func (p *PlatformService) ResetPlatformSettings(platformKey string) error {
 }
 
 func (p *PlatformService) GetStatsReport() (StatsReport, error) {
-	p.mu.RLock()
-	exeDir, err := ResolveExeDir()
-	if err != nil {
-		p.mu.RUnlock()
-		return StatsReport{}, err
-	}
-	s, err := loadSettings(exeDir)
-	if err != nil {
-		p.mu.RUnlock()
-		return StatsReport{}, err
-	}
-	share := s.StatsShare
-	p.mu.RUnlock()
-
 	data, err := stats.GetReportData()
 	if err != nil {
 		return StatsReport{}, err
 	}
-	return assembleStatsReport(data, share), nil
+	return assembleStatsReport(data, false), nil
 }
 
 func (p *PlatformService) ResetStatistics() error {

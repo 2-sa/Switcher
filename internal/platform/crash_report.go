@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"TcNo-Acc-Switcher/internal/api"
 	"TcNo-Acc-Switcher/internal/crashlog"
 )
 
@@ -9,10 +10,9 @@ func (*PlatformService) HasPendingCrashReport() (bool, error) {
 	return crashlog.HasPending(), nil
 }
 
-// SubmitPendingCrashReport uploads a pending crash dump when allowed.
-// Returns true when a dump was found and successfully submitted.
+// SubmitPendingCrashReport refuses uploads from legacy native clients.
 func (*PlatformService) SubmitPendingCrashReport() (bool, error) {
-	return crashlog.SubmitPending(), nil
+	return false, api.ErrReportingDisabled
 }
 
 // DiscardPendingCrashReport deletes a pending crash dump without uploading it.
@@ -35,6 +35,9 @@ func (p *PlatformService) GetCrashReportAutoSubmit() (bool, error) {
 }
 
 func (p *PlatformService) SetCrashReportAutoSubmit(enabled bool) error {
+	if enabled {
+		return api.ErrReportingDisabled
+	}
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	exeDir, err := ResolveExeDir()
