@@ -152,7 +152,7 @@ func (m *Manager) Start(iconPNG []byte) {
 	if len(iconPNG) > 0 {
 		m.systray.SetIcon(fitTrayIcon(iconPNG))
 	}
-	m.systray.SetLabel("TcNo Account Switcher")
+	m.systray.SetLabel("BearSwitcher")
 	m.rebuildMenuLocked()
 
 	m.systray.OnDoubleClick(func() {
@@ -195,7 +195,7 @@ func (m *Manager) rebuildMenuLocked() {
 		return
 	}
 
-	menu.Add("TcNo Account Switcher").OnClick(func(_ *application.Context) {
+	menu.Add("BearSwitcher").OnClick(func(_ *application.Context) {
 		m.showHome()
 	})
 
@@ -234,7 +234,7 @@ func (m *Manager) rebuildMenuLocked() {
 			item.OnClick(func(_ *application.Context) {
 				if err := m.handleAccountClick(plat, u.Arg); err != nil {
 					slog.Default().Warn("tray switch failed", slog.Any("err", err))
-					platform.NotifyNative("tcno-tray-switch-failed", "TcNo Account Switcher", err.Error(), map[string]interface{}{
+					platform.NotifyNative("tcno-tray-switch-failed", "BearSwitcher", err.Error(), map[string]interface{}{
 						"type":     "tray-switch-failed",
 						"platform": plat,
 					})

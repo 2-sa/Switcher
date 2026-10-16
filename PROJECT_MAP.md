@@ -3,6 +3,12 @@
 Status: redesign, Windows CI, and fork release publication verified; native visual/interaction and installed updater acceptance are pending.
 Reviewed: 2026-10-16.
 
+## [DISPLAY NAME — 2026-10-17]
+
+- User approved BearSwitcher as the visible name only. Updated interface headings, caption branding, tray labels, updater window, notifications, presence text, CLI heading, translated display strings, and Windows ProductName/FileDescription. Adjusted the sidebar wordmark size to fit the existing rail.
+- Retained executable/build names, module/import names, bindings, application identifiers, protocol/IPC names, update URLs/signing/assets, settings/data paths, shortcut filenames, legal attribution, and author links. Translation text that names the real legacy data folder remains accurate.
+- These are display changes only; native rendering and CI build validation are pending.
+
 ## [PRIVACY]
 
 - Branch verification: [run 38843086002](https://github.com/2-sa/Switcher/actions/runs/38843086002) passed on `996c6cfde4fb02ca90b91b1dbc0d3a7235c00e71`: Svelte/TypeScript, frontend tests/build, Go tests (including privacy regressions), and Windows build. Publication was intentionally skipped on the test branch.

@@ -2,7 +2,7 @@ package cli
 
 // HelpText returns CLI usage for console / --help.
 func HelpText() string {
-	return `TcNo Account Switcher — CLI
+	return `BearSwitcher — CLI
 
 Swap (Steam):        +s:<steamId64>[:<personaState>]
                      tcno://s:<steamId64>[:<personaState>]

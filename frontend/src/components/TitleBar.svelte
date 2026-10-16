@@ -67,9 +67,7 @@
 
 <header class="headerbar" dir="ltr">
     <span class="title-left">
-        <svg class="header_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 264" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
-            <use href="img/TcNo_Logo_Flat.svg#logo"></use>
-        </svg>
+        <span class="header_icon">BearSwitcher</span>
     </span>
     <span id="title-label" class="title-drag" dir="auto">
         {titleLabel}
@@ -137,9 +135,6 @@
         height: 100%;
         display: flex;
         flex-direction: row;
-        /* The logo is 10px tall inside 12px margins, so it needs 34px in a 32px
-           row. Stretched, it overflowed and settled a pixel low while every
-           sibling sat centred; centring honours the margins symmetrically. */
         align-items: center;
     }
     .title-drag {
@@ -154,10 +149,12 @@
         pointer-events: none;
     }
     .header_icon {
-        height: 10px;
         margin: 12px;
         display: block;
-        fill: var(--whiteSecondary);
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--whiteSecondary);
     }
     .window-controls {
         --wails-draggable: no-drag;

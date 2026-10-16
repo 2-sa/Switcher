@@ -54,7 +54,7 @@
   const SEARCH_MAX = 5;
 
   $: so = $searchOverlayCtrl;
-  $: appBarTitle.set("TcNo Account Switcher");
+  $: appBarTitle.set("BearSwitcher");
   $: {
     const q = overlayQuery;
     if (overlayQueryDebounceTimer) clearTimeout(overlayQueryDebounceTimer);

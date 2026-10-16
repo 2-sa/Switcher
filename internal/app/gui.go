@@ -75,7 +75,7 @@ const (
 func mainWindowOptions(guiSettings platform.AppSettings, parsed cli.Parsed) application.WebviewWindowOptions {
 	winOpts := application.WebviewWindowOptions{
 		Name:      "main",
-		Title:     "TcNo Account Switcher",
+		Title:     "BearSwitcher",
 		MinWidth:  mainWindowMinWidth,
 		MinHeight: mainWindowMinHeight,
 		Mac: application.MacWindow{

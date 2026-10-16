@@ -164,7 +164,7 @@
   let hasGameStatsSupport = false;
 
   $: so = $searchOverlayCtrl;
-  $: appBarTitle.set(name || "TcNo Account Switcher");
+  $: appBarTitle.set(name || "BearSwitcher");
   $: isActionBusy = isActionBusyValue;
 
   $: {

@@ -54,7 +54,7 @@ export const previousPage = {
     }
   },
 };
-export const appBarTitle = writable("TcNo Account Switcher");
+export const appBarTitle = writable("BearSwitcher");
 
 /**
  * Which way the last navigation went: 1 deeper into the app, -1 back out, read

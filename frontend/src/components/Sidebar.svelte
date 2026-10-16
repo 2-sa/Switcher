@@ -36,7 +36,7 @@
 <nav class="sidebar" aria-label={$t("Shell_Navigation")}>
   <div class="sidebar__brand" dir="ltr">
     <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 9h19l-4-4m7 18H8l4 4M24 9l-4 4M8 23l4-4" /></svg>
-    <span>Switcher</span>
+    <span>BearSwitcher</span>
   </div>
   <button class="sidebar__link" class:sidebar__link--active={$route.page === "home"}
     aria-current={$route.page === "home" ? "page" : undefined} {disabled}

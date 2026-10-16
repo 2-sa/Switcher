@@ -39,7 +39,7 @@
     </a>
   </div>
   <div class="rightContent">
-    <h2>TcNo Account Switcher</h2>
+    <h2>BearSwitcher</h2>
     <p>{$t("Modal_Info_Creator")}</p>
     <div class="linksList">
       <a href="https://patreon.com/TroubleChute" on:click={(e) => openExternal("https://patreon.com/TroubleChute", e)}>

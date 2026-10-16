@@ -131,9 +131,9 @@ func (m *Manager) Refresh() {
 		State:      "",
 		Details:    "Currently switching accounts",
 		LargeImage: discordLargeImageKey,
-		LargeText:  "TcNo Account Switcher",
+		LargeText:  "BearSwitcher",
 		SmallImage: discordSmallImageKey,
-		SmallText:  "TcNo Account Switcher",
+		SmallText:  "BearSwitcher",
 		Buttons: []*richgo.Button{
 			{Label: "Website", Url: "https://github.com/TCNOCo/TcNo-Acc-Switcher/"},
 		},

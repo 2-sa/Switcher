@@ -45,7 +45,7 @@ func emitAppUpdateAvailable(message string) {
 		Message:     message,
 		DownloadURL: downloadURL,
 	})
-	NotifyNative("tcno-update-available", "TcNo Account Switcher", message, map[string]interface{}{
+	NotifyNative("tcno-update-available", "BearSwitcher", message, map[string]interface{}{
 		"type": "update-available",
 		"url":  downloadURL,
 	})
@@ -126,12 +126,12 @@ func EnableAutoRestartAfterUpdate(app *application.App) {
 	// finds a release does not download anything, and announcing one there
 	// tells users an update is being applied behind their back.
 	app.Event.On(updater.EventDownloadStarted, func(*application.CustomEvent) {
-		NotifyNative("tcno-update-downloading", "TcNo Account Switcher", "Downloading the update.", map[string]interface{}{
+		NotifyNative("tcno-update-downloading", "BearSwitcher", "Downloading the update.", map[string]interface{}{
 			"type": "update-downloading",
 		})
 	})
 	app.Event.On(updater.EventUpdateReady, func(*application.CustomEvent) {
-		NotifyNative("tcno-update-ready", "TcNo Account Switcher", "Update installed. Restarting TcNo Account Switcher.", map[string]interface{}{
+		NotifyNative("tcno-update-ready", "BearSwitcher", "Update installed. Restarting BearSwitcher.", map[string]interface{}{
 			"type": "update-ready",
 		})
 		// Share the guarded restart path with the built-in button. Ready can
