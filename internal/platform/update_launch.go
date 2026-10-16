@@ -134,12 +134,9 @@ func EnableAutoRestartAfterUpdate(app *application.App) {
 		NotifyNative("tcno-update-ready", "TcNo Account Switcher", "Update installed. Restarting TcNo Account Switcher.", map[string]interface{}{
 			"type": "update-ready",
 		})
-		go func() {
-			defer crashlog.Capture()
-			if err := app.Updater.Restart(app.Context()); err != nil {
-				app.Logger.Error("update: Restart", "error", err)
-			}
-		}()
+		// Share the guarded restart path with the built-in button. Ready can
+		// also be replayed when the update window finishes loading.
+		app.Event.Emit(updater.EventUserRestart)
 	})
 	app.Event.On(updater.EventError, func(e *application.CustomEvent) {
 		if info, ok := e.Data.(updater.ErrorInfo); ok {

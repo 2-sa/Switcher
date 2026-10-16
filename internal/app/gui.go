@@ -251,6 +251,7 @@ func RunGUI(params RunGUIParams) {
 		} else {
 			updaterWindow := updatertheme.NewBuiltinWindow()
 			updatertheme.SetWindow(updaterWindow)
+			wailsApp.Updater = updater.New(newUpdateHost(wailsApp))
 			if err := wailsApp.Updater.Init(updater.Config{
 				CurrentVersion: currentVersion,
 				Providers:      []updater.Provider{gh},

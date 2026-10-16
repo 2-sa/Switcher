@@ -173,6 +173,19 @@ User feedback after commit 944bf850: the interface still contains widespread LTR
 
 ## [ORPHANS & PENDING]
 
+### Updater restart investigation — 2026-10-16
+
+- Native failure confirmed by the local Wails helper log: the update was staged and the helper started, but the parent process remained alive for 30 seconds; the helper aborted before replacing the executable. The user confirms both windows remain visible after Restart & Apply.
+- The affected client reports 4.1.9, updating to 4.1.11. Its process and executable at the recorded download path were no longer available during investigation. The blocked shutdown hook has not been identified; no restart fix is claimed.
+- Inspected the pinned Wails beta.16 restart/helper/host implementations and application shutdown hooks. An isolated copy of the already downloaded 4.1.11 executable was used for diagnostics; the failed button flow was not reproduced. Temporary test processes were stopped. No toolchain was installed and no release was published for this investigation.
+- Next acceptance: reproduce using the affected client with debug logging, identify the blocked shutdown stage, add a regression test, and verify signed download → process exit → replacement → relaunch on Windows. Do not treat CI alone as confirmation.
+
+### Bounded update shutdown — implementation
+
+- Added an application-owned Wails updater host. Once Wails successfully starts its signed-update helper and calls Host.Quit, normal shutdown has a 20-second process-exit deadline, below the helper's 30-second wait. A blocked shutdown exits the process so the helper can replace and relaunch it. Ordinary exits and failed helper spawns do not arm this deadline. This is a bounded fallback; the original blocked shutdown hook remains unidentified.
+- Ready notifications/replays and Restart & Apply use one guarded restart path. Repeated requests cannot launch competing helpers; helper-start errors are logged and allow retry.
+- Added Go regression cases for blocked shutdown, asynchronous exit, duplicate restart requests, spawn-failure retry, and a real blocked child process. Local Go tools remain unavailable; CI validation and native signed-update acceptance are pending. Download the repaired release manually once because code in a new executable cannot repair the already-running old updater.
+
 No known newly orphaned source remains. GitHub checks, build, signing verification, and release publication passed in run `38840878349`. A visual retest of the repaired executable and an installed update/download/restart flow remain pending; CI and publication do not establish those runtime results.
 
 - Resolved CI failures: first run `38721926769` used `C:/Users/RUNNER~1/...` temporary paths, causing existing shortcut/backup path comparisons to fail. Initial correction `44adb716` used a runner context at unsupported job-env scope; `69877c1e` instead exports TEMP/TMP from RUNNER_TEMP through GITHUB_ENV in a startup step. The complete Go suite and executable build then passed in run `38722942797`. No protection checks or failing tests were disabled.
