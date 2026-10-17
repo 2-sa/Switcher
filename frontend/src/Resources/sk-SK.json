@@ -996,7 +996,7 @@
   "Title_AccountsList": "BearSwitcher – {platform}",
   "Title_Settings": "BearSwitcher – Nastavenia",
   "Title_Steam_Cleaning": "BearSwitcher – Čistenie Steam",
-  "Title_Template_Settings": "BearSwitcher - Nastavenia {platformName}",
+  "Title_Template_Settings": "Nastavenia {platformName}",
   "Tray_Switch": "Prepnúť na: {account}",
   "Tray_Unlock": "Odomknúť",
   "Tray_Exit": "Ukončiť",

@@ -66,9 +66,6 @@
 </script>
 
 <header class="headerbar" dir="ltr">
-    <span class="title-left">
-        <span class="header_icon">BearSwitcher</span>
-    </span>
     <span id="title-label" class="title-drag" dir="auto">
         {titleLabel}
     </span>
@@ -123,19 +120,12 @@
         color: var(--whiteSecondary);
         grid-column: 1;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         overflow: hidden;
         font-family: "Segoe UI", sans-serif;
         font-size: 12px;
         font-weight: 500;
-    }
-    .title-left {
-        z-index: 1;
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
     }
     .title-drag {
         position: absolute;
@@ -147,14 +137,6 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         pointer-events: none;
-    }
-    .header_icon {
-        margin: 12px;
-        display: block;
-        font-size: 10px;
-        font-weight: 700;
-        line-height: 1;
-        color: var(--whiteSecondary);
     }
     .window-controls {
         --wails-draggable: no-drag;

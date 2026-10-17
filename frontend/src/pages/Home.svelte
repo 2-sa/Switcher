@@ -54,7 +54,7 @@
   const SEARCH_MAX = 5;
 
   $: so = $searchOverlayCtrl;
-  $: appBarTitle.set("BearSwitcher");
+  $: appBarTitle.set($t("Shell_Platforms"));
   $: {
     const q = overlayQuery;
     if (overlayQueryDebounceTimer) clearTimeout(overlayQueryDebounceTimer);

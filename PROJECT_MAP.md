@@ -5,6 +5,8 @@ Reviewed: 2026-10-16.
 
 ## [DISPLAY NAME — 2026-10-17]
 
+- Follow-up: removed the redundant caption wordmark; Home's caption shows its translated page name, and translated page titles omit the product prefix. BearSwitcher remains the sidebar brand. Window controls keep their physical right-hand placement.
+
 - User approved BearSwitcher as the visible name only. Updated interface headings, caption branding, tray labels, updater window, notifications, presence text, CLI heading, translated display strings, and Windows ProductName/FileDescription. Adjusted the sidebar wordmark size to fit the existing rail.
 - Retained executable/build names, module/import names, bindings, application identifiers, protocol/IPC names, update URLs/signing/assets, settings/data paths, shortcut filenames, legal attribution, and author links. Translation text that names the real legacy data folder remains accurate.
 - These are display changes only; native rendering and CI build validation are pending.
