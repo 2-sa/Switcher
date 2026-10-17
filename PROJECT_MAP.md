@@ -11,6 +11,13 @@ Reviewed: 2026-10-16.
 - Retained executable/build names, module/import names, bindings, application identifiers, protocol/IPC names, update URLs/signing/assets, settings/data paths, shortcut filenames, legal attribution, and author links. Translation text that names the real legacy data folder remains accurate.
 - These are display changes only; native rendering and CI build validation are pending.
 
+## [INSTALLER — 2026-10-17]
+
+- User requires an installation wizard as the main download. Added a fork-specific NSIS installer with Arabic/English, directory selection, Start menu shortcuts, an optional desktop shortcut, WebView2 prerequisite detection, and per-user Windows uninstall registration. Default: LocalAppData/Programs/BearSwitcher, writable by the current user for signed in-app updates.
+- Reuses the existing executable name and AppData settings/accounts. The fork installer does not enable reporting or copy the upstream installer's recursive data deletion. Uninstall deletes only installed files and its own registration/shortcuts; user data and unknown files are preserved.
+- Packaging tools and smoke installation run only on GitHub. CI must exercise silent install, reinstallation/upgrade, uninstallation, hashes, shortcuts/registry, and preservation markers before signing and publishing. Both setup and updater payload receive detached Ed25519 signatures and SHA-256 checksums; these are not Windows Authenticode certificates.
+- Official NSIS changelog identifies stable 3.13 (2026-09-27). The existing Wails beta.16 tool downloads Microsoft's signed Evergreen bootstrapper; its Authenticode signature is verified before packaging. CI results and interactive Arabic wizard acceptance remain pending.
+
 ## [PRIVACY]
 
 - Branch verification: [run 38843086002](https://github.com/2-sa/Switcher/actions/runs/38843086002) passed on `996c6cfde4fb02ca90b91b1dbc0d3a7235c00e71`: Svelte/TypeScript, frontend tests/build, Go tests (including privacy regressions), and Windows build. Publication was intentionally skipped on the test branch.

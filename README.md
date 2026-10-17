@@ -1,3 +1,8 @@
+## BearSwitcher — Windows installer
+
+[Download BearSwitcher-Setup.exe](https://github.com/2-sa/Switcher/releases/latest/download/BearSwitcher-Setup.exe)
+
+Run the setup wizard to install BearSwitcher. Arabic and English are supported. Setup creates Start menu shortcuts and a Windows uninstall entry; removing the app preserves saved accounts and settings. The separate application executable in release assets is used by the automatic updater.
 
 <p align="center">
   <a href="https://tcno.co/">
@@ -22,7 +27,7 @@
     <img alt="Ko-Fi" src="https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
 </p> 
 
-<p align="center"><a target="_blank" href="https://github.com/TCNOco/TcNo-Acc-Switcher/releases/latest">
+<p align="center"><a target="_blank" href="https://github.com/2-sa/Switcher/releases/latest/download/BearSwitcher-Setup.exe">
   <img alt="Download latest" src="/other/img/DownloadLatestNEW.png" height=70"></a>
   <a target="_blank" href="https://github.com/TCNOco/TcNo-Acc-Switcher/wiki">
   <img alt="More info" src="/other/img/WikiButton.png" height=70"></a>

@@ -9,14 +9,15 @@ import (
 
 func TestGitHubAssetMatcher_explicitWindowsExe(t *testing.T) {
 	assets := []github.ReleaseAsset{
+		{Name: "BearSwitcher-Setup.exe"},
 		{Name: "TcNo-Acc-Switcher.7z"},
 		{Name: "TcNo-Acc-Switcher.exe.sig"},
 		{Name: "TcNo-Acc-Switcher.exe"},
 		{Name: "TcNo.Account.Switcher.-.Installer.exe"},
 	}
 	req := updater.CheckRequest{Platform: "windows", Arch: "amd64"}
-	if got := GitHubAssetMatcher(req, assets); got != 2 {
-		t.Fatalf("got index %d, want 2 (TcNo-Acc-Switcher.exe)", got)
+	if got := GitHubAssetMatcher(req, assets); got != 3 {
+		t.Fatalf("got index %d, want 3 (TcNo-Acc-Switcher.exe, not the installer)", got)
 	}
 }
 

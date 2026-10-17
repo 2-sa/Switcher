@@ -87,6 +87,16 @@ jobs:
       - name: Build Windows application
         run: wails3 task windows:build
 
+      - name: Build and test BearSwitcher installer
+        run: |
+          choco upgrade nsis -y --no-progress
+          if ($LASTEXITCODE -ne 0) { throw 'NSIS installation failed on the build runner.' }
+          & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" /VERSION
+          $displayVersion = if ($env:APP_VERSION) { $env:APP_VERSION } else { '0.0.0' }
+          $fileVersion = if ($env:NSIS_VERSION) { $env:NSIS_VERSION } else { '0.0.0.0' }
+          .\other\build-fork-installer.ps1 -Version $displayVersion -FileVersion $fileVersion
+          .\other\test-fork-installer.ps1 -Version $displayVersion
+
       - name: Sign and verify fork update
         if: steps.release-version.outputs.tag != ''
         env:
@@ -98,13 +108,16 @@ jobs:
           $keyPath = Join-Path $env:RUNNER_TEMP 'fork-updater-key.pem'
           try {
             [System.IO.File]::WriteAllText($keyPath, $env:FORK_UPDATER_KEY, [System.Text.UTF8Encoding]::new($false))
-            $signature = go run ./other/sign-release $keyPath bin/TcNo-Acc-Switcher.exe
-            if ($LASTEXITCODE -ne 0) { throw 'Update signing failed.' }
-            Set-Content bin/TcNo-Acc-Switcher.exe.sig -Value $signature -Encoding utf8NoBOM
-            go run ./other/verify-release updater-key.pub bin/TcNo-Acc-Switcher.exe bin/TcNo-Acc-Switcher.exe.sig
-            if ($LASTEXITCODE -ne 0) { throw 'Update signature verification failed.' }
-            $hash = (Get-FileHash bin/TcNo-Acc-Switcher.exe -Algorithm SHA256).Hash.ToLowerInvariant()
-            Set-Content bin/SHA256SUMS -Value "$hash  TcNo-Acc-Switcher.exe" -Encoding utf8NoBOM
+            $checksums = foreach ($name in @('TcNo-Acc-Switcher.exe', 'BearSwitcher-Setup.exe')) {
+              $file = Join-Path bin $name
+              $signature = go run ./other/sign-release $keyPath $file
+              if ($LASTEXITCODE -ne 0) { throw "Signing failed: $name" }
+              Set-Content "$file.sig" -Value $signature -Encoding utf8NoBOM
+              go run ./other/verify-release updater-key.pub $file "$file.sig" | Out-Host
+              if ($LASTEXITCODE -ne 0) { throw "Signature verification failed: $name" }
+              "$((Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant())  $name"
+            }
+            Set-Content bin/SHA256SUMS -Value $checksums -Encoding utf8NoBOM
           } finally {
             Remove-Item -LiteralPath $keyPath -Force -ErrorAction SilentlyContinue
           }
@@ -115,6 +128,8 @@ jobs:
         with:
           name: fork-release
           path: |
+            bin/BearSwitcher-Setup.exe
+            bin/BearSwitcher-Setup.exe.sig
             bin/TcNo-Acc-Switcher.exe
             bin/TcNo-Acc-Switcher.exe.sig
             bin/SHA256SUMS
@@ -166,15 +181,19 @@ jobs:
             cat > release-notes.md <<EOF
           Windows x64 build from commit $SOURCE_COMMIT.
 
-          Download TcNo-Acc-Switcher.exe and run it directly. This build includes the Arabic interface and fork update source.
+          ## Install BearSwitcher
+
+          Download [BearSwitcher-Setup.exe](https://github.com/2-sa/Switcher/releases/download/$RELEASE_TAG/BearSwitcher-Setup.exe) and follow the installation wizard. The installer supports Arabic and English, adds Start menu shortcuts and Windows uninstall registration, and preserves existing account data.
+
+          The separate TcNo-Acc-Switcher.exe asset is the payload used by the in-app updater. Use BearSwitcher-Setup.exe for installation.
 
           Update authenticity is protected by an Ed25519 signature, verified before publication. The executable does not have a Windows Authenticode certificate.
 
           Builds made before the fork signing key was introduced require one manual download of this version. Later versions can update through the application.
           EOF
-            gh release create "$RELEASE_TAG" --target "$SOURCE_COMMIT" --draft --title "Switcher $RELEASE_VERSION" --notes-file release-notes.md
+            gh release create "$RELEASE_TAG" --target "$SOURCE_COMMIT" --draft --title "BearSwitcher $RELEASE_VERSION" --notes-file release-notes.md
           fi
-          gh release upload "$RELEASE_TAG" TcNo-Acc-Switcher.exe TcNo-Acc-Switcher.exe.sig SHA256SUMS --clobber
+          gh release upload "$RELEASE_TAG" BearSwitcher-Setup.exe BearSwitcher-Setup.exe.sig TcNo-Acc-Switcher.exe TcNo-Acc-Switcher.exe.sig SHA256SUMS --clobber
           gh release edit "$RELEASE_TAG" --draft=false
           release_id="$(gh api "repos/$GH_REPO/releases/tags/$RELEASE_TAG" --jq '.id')"
           gh api --method PATCH "repos/$GH_REPO/releases/$release_id" -f make_latest=legacy > /dev/null
