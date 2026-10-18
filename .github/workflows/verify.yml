@@ -5,6 +5,11 @@ on:
     branches: ['**']
   pull_request:
   workflow_dispatch:
+    inputs:
+      publish_release:
+        description: Build, sign, and publish a new fork release
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -40,7 +45,7 @@ jobs:
 
       - name: Prepare fork release version
         id: release-version
-        if: github.repository == '2-sa/Switcher' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.repository == '2-sa/Switcher' && github.event_name == 'workflow_dispatch' && inputs.publish_release && github.ref == 'refs/heads/master'
         env:
           RELEASE_VERSION: 4.1.${{ github.run_number }}
         run: |
@@ -88,6 +93,7 @@ jobs:
         run: wails3 task windows:build
 
       - name: Build and test BearSwitcher installer
+        if: github.event_name == 'workflow_dispatch'
         run: |
           choco upgrade nsis -y --no-progress
           if ($LASTEXITCODE -ne 0) { throw 'NSIS installation failed on the build runner.' }
@@ -134,20 +140,21 @@ jobs:
             bin/TcNo-Acc-Switcher.exe.sig
             bin/SHA256SUMS
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
       - name: Upload unsigned test build
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v7
         with:
           name: switcher-windows-unsigned
           path: bin/TcNo-Acc-Switcher.exe
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
   publish:
     name: Publish fork release
     needs: windows
-    if: github.repository == '2-sa/Switcher' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.repository == '2-sa/Switcher' && github.event_name == 'workflow_dispatch' && inputs.publish_release && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:
       contents: write

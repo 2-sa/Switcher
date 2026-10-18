@@ -199,7 +199,7 @@ jobs:
           path: bin/TcNo-Acc-Switcher.exe
           archive: false
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
       - name: Sign executable with SignPath
         id: sign-exe
@@ -228,7 +228,7 @@ jobs:
           path: build/windows/nsis/TcNo Account Switcher Installer.exe
           archive: false
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
       - name: Sign installer with SignPath
         id: sign-installer
